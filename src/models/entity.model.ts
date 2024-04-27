@@ -24,5 +24,14 @@ export const EntityModel = sequelize.define('entity', {
         type: DataTypes.JSON,
         allowNull: true,
         defaultValue: null
+    },
+    sections: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
+    },
+    type: {
+        type: DataTypes.STRING(30),
+        allowNull: false
     }
 })
