@@ -2,7 +2,6 @@ import { Router, Request, Response } from "express";
 import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
-import { LegendHttpError } from "../web/errors";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 
 
@@ -55,10 +54,6 @@ class EntityController {
         const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
 
         const entity = await this.Service.findById(validatedId)
-
-        if (!entity) {
-            throw new LegendHttpError(404, 'Entity not found.')
-        }
 
         return res.status(200).json(entity)
     }

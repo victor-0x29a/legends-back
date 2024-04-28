@@ -79,7 +79,7 @@ describe('success', () => {
         }
 
         // @ts-ignore
-        mockedEntityModel.findByPk.mockResolvedValue(entity)
+        mockedEntityModel.findOne.mockResolvedValue(entity)
 
         const foundEntity = await entityService.findById(1)
         expect(foundEntity).toEqual(entity)
@@ -161,6 +161,16 @@ describe('failure', () => {
 
         try {
             await entityService.delete(1)
+        } catch (error) {
+            expect(error.message).toBe('Entity not found.')
+        }
+    })
+    it('findById', async () => {
+        // @ts-ignore
+        mockedEntityModel.findOne.mockResolvedValue(null)
+
+        try {
+            await entityService.findById(1)
         } catch (error) {
             expect(error.message).toBe('Entity not found.')
         }
