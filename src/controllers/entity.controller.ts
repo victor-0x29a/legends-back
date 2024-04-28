@@ -12,6 +12,7 @@ class EntityController {
 
     constructor() {
         this.loadRoutes()
+        console.log('EntityController loaded')
     }
 
     private loadRoutes() {
