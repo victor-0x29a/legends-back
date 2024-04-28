@@ -15,6 +15,7 @@ class EntityController {
     private loadRoutes() {
         this.router.get('/', this.getAll)
         this.router.get('/:id', this.getById)
+        this.router.delete('/:id', this.delete)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -39,6 +40,16 @@ class EntityController {
         }
 
         return res.status(200).json(entity)
+    }
+
+    private delete = async (req: Request, res: Response) => {
+        const { id } = req.params
+
+        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
+
+        await this.Service.delete(validatedId)
+
+        return res.status(204).json({})
     }
 }
 
