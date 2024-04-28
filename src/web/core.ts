@@ -1,9 +1,9 @@
 import type { Express } from 'express'
+require("express-async-errors");
 import cors from 'cors'
 import bodyParser from 'body-parser'
-
-import { Router } from 'express'
 import EntityController from '../controllers/entity.controller'
+import { HandlerException } from './handlerException'
 
 class WebCore {
     constructor(private readonly port: number, private readonly app: Express) {}
@@ -11,6 +11,7 @@ class WebCore {
     public start(): void {
         this.loadMiddlewares()
         this.loadRoutes()
+        this.app.use(HandlerException);
         this.app.listen(this.port, () => {
             console.log(`Server is running on port ${this.port}`)
         })
