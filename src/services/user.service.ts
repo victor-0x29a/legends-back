@@ -29,6 +29,13 @@ class UserService {
             returning: false
         })
     }
+
+    async delete(id: number) {
+        await searchEntity(this.userModel, { id }, false, true)
+        return await this.userModel.destroy({
+            where: { id }
+        })
+    }
 }
 
 export { UserService }
