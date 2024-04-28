@@ -95,3 +95,52 @@ describe('success', () => {
         expect(deletedEntity).toBe(1)
     })
 })
+
+describe('failure', () => {
+    it('create', async () => {
+        const entity = {
+            id: 1,
+            title: 'test',
+            properties: [],
+            description: 'test description',
+            type: 'test type'
+        }
+
+        // @ts-ignore
+        mockedEntityModel.findOne.mockResolvedValue(entity)
+
+        try {
+            await entityService.create(entity)
+        } catch (error) {
+            expect(error.message).toBe('Entity already exists by title.')
+        }
+    })
+    it('update', async () => {
+        const entity = {
+            id: 1,
+            title: 'test',
+            properties: [],
+            description: 'test description',
+            type: 'test type'
+        }
+
+        // @ts-ignore
+        mockedEntityModel.findOne.mockResolvedValue(null)
+
+        try {
+            await entityService.update(1, entity)
+        } catch (error) {
+            expect(error.message).toBe('Entity not found.')
+        }
+    })
+    it('delete', async () => {
+        // @ts-ignore
+        mockedEntityModel.findOne.mockResolvedValue(null)
+
+        try {
+            await entityService.delete(1)
+        } catch (error) {
+            expect(error.message).toBe('Entity not found.')
+        }
+    })
+})
