@@ -23,7 +23,7 @@ class EntityService {
     }
 
     async findById (id: number) {
-        return await this.entityModel.findByPk(id)
+        return await searchEntity(this.entityModel, { id }, false, true)
     }
 
     async update (id: number, entity: UpdateEntityDto) {
