@@ -3,7 +3,7 @@ import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } fr
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { LegendHttpError } from "../web/errors";
-import { findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
+import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 
 
 class EntityController {
@@ -18,6 +18,7 @@ class EntityController {
         this.router.get('/:id', this.getById)
         this.router.delete('/:id', this.delete)
         this.router.put('/:id', this.update)
+        this.router.post('/', this.create)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -81,6 +82,16 @@ class EntityController {
         await this.Service.update(validatedId, updateData)
 
         return res.status(204).json({})
+    }
+
+    private create = async (req: Request, res: Response) => {
+        const entity = req.body
+
+        const validatedEntity = await createEntitySchema.validate(entity)
+
+        await this.Service.create(validatedEntity)
+
+        return res.status(201).json({})
     }
 }
 
