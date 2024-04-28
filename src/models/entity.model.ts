@@ -1,7 +1,23 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../database/connection'
 
+export type Entity = {
+    id: number
+    title: string
+    properties: object
+    description: string
+    author?: string
+    image?: object
+    sections?: string
+    type: string
+}
+
 export const EntityModel = sequelize.define('entity', {
+    id: {
+        type: DataTypes.NUMBER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false
