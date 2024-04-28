@@ -1,5 +1,7 @@
 import { Entity, EntityModel } from "../models/entity.model";
 import { searchEntity } from "../utils/searchEntity";
+import { FindAllEntityDto } from "../dtos/find-all-entity.dto";
+
 
 class EntityService {
     constructor (private readonly entityModel: typeof EntityModel) {}
