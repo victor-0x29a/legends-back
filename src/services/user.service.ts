@@ -19,11 +19,11 @@ class UserService {
     }
 
     async findById(id: number) {
-        return await searchEntity(this.userModel, { id }, false, true)
+        return await searchEntity(this.userModel, { id }, false, true, 'User not found.')
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
-        await searchEntity(this.userModel, { id }, false, true)
+        await searchEntity(this.userModel, { id }, false, true, 'User not found.')
         return await this.userModel.update(updateUserDto, {
             where: { id },
             returning: false
@@ -31,7 +31,7 @@ class UserService {
     }
 
     async delete(id: number) {
-        await searchEntity(this.userModel, { id }, false, true)
+        await searchEntity(this.userModel, { id }, false, true, 'User not found.')
         return await this.userModel.destroy({
             where: { id }
         })
