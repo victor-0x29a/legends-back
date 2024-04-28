@@ -1,7 +1,8 @@
 import type { Router, Request, Response } from "express";
-import { paginationSchema, parsedPaginationSchema } from "../schemas/global.schema";
+import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
+import { LegendHttpError } from "../web/errors";
 
 
 class EntityController {
@@ -13,6 +14,7 @@ class EntityController {
 
     private loadRoutes() {
         this.router.get('/', this.getAll)
+        this.router.get('/:id', this.getById)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -23,6 +25,20 @@ class EntityController {
         const entities = await this.Service.findAll(pagination)
 
         return res.status(200).json(entities)
+    }
+
+    private getById = async (req: Request, res: Response) => {
+        const { id } = req.params
+
+        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
+
+        const entity = await this.Service.findById(validatedId)
+
+        if (!entity) {
+            throw new LegendHttpError(404, 'Entity not found.')
+        }
+
+        return res.status(200).json(entity)
     }
 }
 
