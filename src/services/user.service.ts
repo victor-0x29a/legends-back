@@ -10,6 +10,12 @@ class UserService {
         await searchEntity(this.userModel, { username: createUserDto.username }, true, false, 'User already exists by username.')
         return await this.userModel.create(createUserDto)
     }
+
+    async findAll() {
+        return await this.userModel.findAll({
+            attributes: ['id', 'name', 'username']
+        })
+    }
 }
 
 export { UserService }
