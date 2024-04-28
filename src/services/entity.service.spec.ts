@@ -30,22 +30,44 @@ describe('success', () => {
         const createdEntity = await entityService.create(entity)
         expect(createdEntity).toEqual(entity)
     })
-    it('findAll', async () => {
-        const entities = [{
-            id: 1,
-            title: 'test',
-            image: null
-        }]
+    describe('findAll', () => {
+        test('should return all entities with just pagination', async () => {
+            const entities = [{
+                id: 1,
+                title: 'test',
+                image: null
+            }]
 
-        // @ts-ignore
-        mockedEntityModel.findAll.mockResolvedValue(entities)
+            // @ts-ignore
+            mockedEntityModel.findAll.mockResolvedValue(entities)
 
-        const foundEntities = await entityService.findAll({
-            page: 1,
-            perPage: 10
+            const foundEntities = await entityService.findAll({
+                page: 1,
+                perPage: 10
+            })
+            expect(foundEntities).toEqual(entities)
+            expect(foundEntities.length).toBe(1)
         })
-        expect(foundEntities).toEqual(entities)
-        expect(foundEntities.length).toBe(1)
+        test('should return all entities with pagination and filters', async () => {
+            const entities = [{
+                id: 1,
+                title: 'test',
+                image: null
+            }]
+
+            // @ts-ignore
+            mockedEntityModel.findAll.mockResolvedValue(entities)
+
+            const foundEntities = await entityService.findAll({
+                page: 1,
+                perPage: 10,
+                filters: {
+                    title: 'test'
+                }
+            })
+            expect(foundEntities).toEqual(entities)
+            expect(foundEntities.length).toBe(1)
+        })
     })
     it('findById', async () => {
         const entity = {
