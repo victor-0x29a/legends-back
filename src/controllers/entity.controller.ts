@@ -3,7 +3,7 @@ import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } fr
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { LegendHttpError } from "../web/errors";
-import { updateSchema } from "../schemas/entity.schema";
+import { findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 
 
 class EntityController {
@@ -21,11 +21,27 @@ class EntityController {
     }
 
     private getAll = async (req: Request, res: Response) => {
-        const { page, perPage } = req.query
+        const { page, perPage, ...others } = req.query
+
+        const filters = Object.keys(others).reduce((acc, key) => {
+            acc[key] = others[key]
+            return acc
+        })
+
+        const hasFilters = Object.keys(filters).length > 0
+
+        let validatedFilters;
+
+        if (hasFilters) {
+            validatedFilters = await findAllFilters.validate(filters) as unknown as parsedFiltersSchema
+        }
 
         const pagination = await paginationSchema.validate({ page, perPage }) as unknown as parsedPaginationSchema
 
-        const entities = await this.Service.findAll(pagination)
+        const entities = await this.Service.findAll({
+            ...pagination,
+            filters: hasFilters ? validatedFilters : undefined
+        })
 
         return res.status(200).json(entities)
     }
