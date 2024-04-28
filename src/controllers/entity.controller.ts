@@ -3,6 +3,7 @@ import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } fr
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { LegendHttpError } from "../web/errors";
+import { updateSchema } from "../schemas/entity.schema";
 
 
 class EntityController {
@@ -16,6 +17,7 @@ class EntityController {
         this.router.get('/', this.getAll)
         this.router.get('/:id', this.getById)
         this.router.delete('/:id', this.delete)
+        this.router.put('/:id', this.update)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -48,6 +50,19 @@ class EntityController {
         const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
 
         await this.Service.delete(validatedId)
+
+        return res.status(204).json({})
+    }
+
+    private update = async (req: Request, res: Response) => {
+        const { id } = req.params
+        const entity = req.body
+
+        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
+
+        const updateData = await updateSchema.validate(entity)
+
+        await this.Service.update(validatedId, updateData)
 
         return res.status(204).json({})
     }
