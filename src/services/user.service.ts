@@ -1,4 +1,5 @@
 import { CreateUserDto } from "../dtos/create-user.dto";
+import { UpdateUserDto } from "../dtos/update-user.dto";
 import { UserModel } from "../models/user.model";
 import { searchEntity } from "../utils/searchEntity";
 
@@ -19,6 +20,14 @@ class UserService {
 
     async findById(id: number) {
         return await searchEntity(this.userModel, { id }, false, true)
+    }
+
+    async update(id: number, updateUserDto: UpdateUserDto) {
+        await searchEntity(this.userModel, { id }, false, true)
+        return await this.userModel.update(updateUserDto, {
+            where: { id },
+            returning: false
+        })
     }
 }
 
