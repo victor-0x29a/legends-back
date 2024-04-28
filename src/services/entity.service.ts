@@ -15,7 +15,8 @@ class EntityService {
         return await this.entityModel.findAll({
             limit: findAllEntityDto.perPage,
             offset: (findAllEntityDto.page - 1) * findAllEntityDto.perPage,
-            attributes: ['id', 'title', 'image']
+            attributes: ['id', 'title', 'image'],
+            ...(findAllEntityDto?.filters && { where: findAllEntityDto.filters })
         })
     }
 
