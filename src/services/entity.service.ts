@@ -26,7 +26,8 @@ class EntityService {
     async update (id: number, entity: Entity) {
         await searchEntity(this.entityModel, { id }, false, true)
         return await this.entityModel.update(entity, {
-            where: { id }
+            where: { id },
+            returning: false
         })
     }
 
