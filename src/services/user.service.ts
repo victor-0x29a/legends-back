@@ -16,6 +16,10 @@ class UserService {
             attributes: ['id', 'name', 'username']
         })
     }
+
+    async findById(id: number) {
+        return await searchEntity(this.userModel, { id }, false, true)
+    }
 }
 
 export { UserService }
