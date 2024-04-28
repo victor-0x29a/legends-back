@@ -18,11 +18,6 @@ export const paginationSchema = object().shape({
 
 export type parsedIdSchema = number
 
-export const idSchema = string().required('Id is required.').test('is-numeric', 'Id must be a number.', (value) => {
-    try {
-        const parsed = Number(value)
-        return parsed > 0
-    } catch (error) {
-        return false
-    }
-}).typeError('Id must be a string.').transform((value) => Number(value))
+export const idSchema = number().required('Id is required.').test('is-numeric', 'Id must greater than zero.', (value) => {
+    return value > 0
+})
