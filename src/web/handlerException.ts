@@ -11,5 +11,7 @@ export const HandlerException = (error: any, req, res, next: NextFunction) => {
         return res.status(error.status).json({ errorList: [error.message] })
     }
 
+    console.warn(error)
+
     return res.status(500).json({ errorList: ['Internal server error.'] })
 }
