@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Entity } from '../models/entity.model';
 
 const entitySchema = {
     title: Yup.string()
@@ -50,6 +51,8 @@ export const updateSchema = Yup.object().shape({
 }).test('fill-one-field', 'Fill one field to update.', (value) => {
     return Object.keys(value).length !== 0;
 })
+
+export type parsedFiltersSchema = Partial<Entity>
 
 export const findAllFilters = Yup.object().shape({
     title: entitySchema.title.optional(),
