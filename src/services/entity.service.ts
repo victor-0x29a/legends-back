@@ -1,6 +1,7 @@
 import { Entity, EntityModel } from "../models/entity.model";
 import { searchEntity } from "../utils/searchEntity";
 import { FindAllEntityDto } from "../dtos/find-all-entity.dto";
+import { UpdateEntityDto } from "../dtos/update-entity.dto";
 
 
 class EntityService {
@@ -24,7 +25,7 @@ class EntityService {
         return await this.entityModel.findByPk(id)
     }
 
-    async update (id: number, entity: Entity) {
+    async update (id: number, entity: UpdateEntityDto) {
         await searchEntity(this.entityModel, { id }, false, true)
         return await this.entityModel.update(entity, {
             where: { id },
