@@ -1,4 +1,4 @@
-import { string, object } from 'yup'
+import { string, object, number } from 'yup'
 
 export type parsedPaginationSchema = {
     page: number
@@ -6,22 +6,14 @@ export type parsedPaginationSchema = {
 }
 
 export const paginationSchema = object().shape({
-    page: string().required('Page is required').test('is-numeric', 'Page must be a number and greater than zero.', (value) => {
-        try {
-            const parsed = Number(value)
-            return parsed > 0
-        } catch (error) {
-            return false
-        }
-    }).typeError('Page must be a string.').transform((value) => Number(value)),
-    perPage: string().required('Per page is required.').test('is-numeric', 'Per page must be a number and greater than zero and less than 50.', (value) => {
-        try {
-            const parsed = Number(value)
-            return parsed > 0 && parsed <= 50
-        } catch (error) {
-            return false
-        }
-    }).typeError('Per page must be a string.').transform((value) => Number(value))
+    page: number().required('Page is required').test('is-numeric', 'Page must greater than zero.', (value) => {
+        const parsed = Number(value)
+        return parsed > 0
+    }),
+    perPage: number().required('Per page is required.').test('is-numeric', 'Per page must greater than zero and less than 50.', (value) => {
+        const parsed = Number(value)
+        return parsed > 0 && parsed <= 50
+    })
 })
 
 export type parsedIdSchema = number
