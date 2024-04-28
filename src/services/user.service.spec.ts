@@ -106,3 +106,40 @@ describe('success', () => {
         })
     })
 })
+
+describe('failure', () => {
+    it('create', async () => {
+        const user = {
+            id: 1,
+            name: 'test',
+            username: 'test',
+            password: 'test'
+        }
+
+        // @ts-ignore
+        UserModel.create.mockResolvedValue(user)
+
+        // @ts-ignore
+        UserModel.findOne.mockResolvedValue(user)
+
+        await expect(service.create(user)).rejects.toThrow('User already exists by username.')
+    })
+    it('findById', async () => {
+        // @ts-ignore
+        UserModel.findOne.mockResolvedValue(null)
+
+        await expect(service.findById(1)).rejects.toThrow('User not found.')
+    })
+    it('update', async () => {
+        // @ts-ignore
+        UserModel.findOne.mockResolvedValue(null)
+
+        await expect(service.update(1, {})).rejects.toThrow('User not found.')
+    })
+    it('delete', async () => {
+        // @ts-ignore
+        UserModel.findOne.mockResolvedValue(null)
+
+        await expect(service.delete(1)).rejects.toThrow('User not found.')
+    })
+})
