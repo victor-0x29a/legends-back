@@ -1,4 +1,4 @@
-import type { Router, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
@@ -8,8 +8,9 @@ import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema }
 
 class EntityController {
     private Service = new EntityService(EntityModel)
+    public readonly router = Router()
 
-    constructor(private readonly router: Router) {
+    constructor() {
         this.loadRoutes()
     }
 
