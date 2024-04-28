@@ -25,10 +25,10 @@ class EntityController {
     private getAll = async (req: Request, res: Response) => {
         const { page, perPage, ...others } = req.query
 
-        const filters = Object.keys(others).reduce((acc, key) => {
+        const filters = Object.keys(others || []).reduce((acc, key) => {
             acc[key] = others[key]
             return acc
-        })
+        }, {})
 
         const hasFilters = Object.keys(filters).length > 0
 
