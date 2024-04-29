@@ -4,6 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import EntityController from '../controllers/entity.controller'
 import { HandlerException } from './handlerException'
+import { UserController } from '../controllers/user.controller';
 
 class WebCore {
     constructor(private readonly port: number, private readonly app: Express) {}
@@ -25,6 +26,7 @@ class WebCore {
 
     private loadRoutes(): void {
         this.app.use('/entity', new EntityController().router)
+        this.app.use('/user', new UserController().router)
     }
 }
 

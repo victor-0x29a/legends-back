@@ -9,7 +9,8 @@ const config: Config = {
   clearMocks: true,
   coverageProvider: "v8",
   maxWorkers: "20%",
-  preset: 'ts-jest'
+  preset: 'ts-jest',
+  setupFiles: ['<rootDir>/src/setVarsJest.js'],
 };
 
 export default config;

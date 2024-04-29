@@ -3,6 +3,7 @@ import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } fr
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
+import { Guard } from "../web/guard";
 
 
 class EntityController {
@@ -17,9 +18,9 @@ class EntityController {
     private loadRoutes() {
         this.router.get('/', this.getAll)
         this.router.get('/:id', this.getById)
-        this.router.delete('/:id', this.delete)
-        this.router.put('/:id', this.update)
-        this.router.post('/', this.create)
+        this.router.delete('/:id', this.delete, Guard)
+        this.router.put('/:id', this.update, Guard)
+        this.router.post('/', this.create, Guard)
     }
 
     private getAll = async (req: Request, res: Response) => {
