@@ -1,28 +1,9 @@
 import request from 'supertest';
 import WebCore from '../src/web/core';
 import express from 'express';
-import { Entity, EntityModel } from '../src/models/entity.model';
-import { faker } from '@faker-js/faker'
+import { createEntity } from './helpers';
 
 const app = new WebCore(3000, express()).app;
-
-const createEntity = async () => {
-    const createdEntity = await EntityModel.create({
-        "title": faker.string.uuid(),
-        "properties": {
-            "strength": 10
-        },
-        "description": "Lorem lorem lorem",
-        "author": "John Doe",
-        "image": {
-            "src": "url",
-            "alt": "alt"
-            },
-        "sections": "markdown content",
-        "type": "item"
-    }) as unknown as Entity
-    return createdEntity
-}
 
 test('GET /entity', async () => {
     await request(app)
