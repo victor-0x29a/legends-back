@@ -196,4 +196,33 @@ describe('failure', () => {
 
         await expect(service.delete(1)).rejects.toThrow('User not found.')
     })
+    describe('signIn', () => {
+        it('should throw an error when user not found', async () => {
+            // @ts-ignore
+            UserModel.findOne.mockResolvedValue(null)
+
+            await expect(service.signIn({
+                username: 'test',
+                password: 'test'
+            })).rejects.toThrow('User or password invalid.')
+        })
+        it('should throw an error when password does not match', async () => {
+            const passwordHashed = await bcrypt.hash('test', 10)
+
+            const user = {
+                id: 1,
+                name: 'test',
+                username: 'test',
+                password: passwordHashed
+            }
+
+            // @ts-ignore
+            UserModel.findOne.mockResolvedValue(user)
+
+            await expect(service.signIn({
+                username: 'test',
+                password: 'test1'
+            })).rejects.toThrow('User or password invalid.')
+        })
+    })
 })
