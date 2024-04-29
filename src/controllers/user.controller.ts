@@ -20,11 +20,11 @@ class UserController {
     }
 
     private loadRoutes() {
-        this.router.get('/', this.getAll, Guard)
-        this.router.get('/:id', this.getById, Guard)
-        this.router.post('/', this.create, Guard)
-        this.router.delete('/:id', this.remove, Guard)
-        this.router.put('/:id', this.update, Guard)
+        this.router.get('/', Guard, this.getAll)
+        this.router.get('/:id', Guard, this.getById)
+        this.router.post('/', Guard, this.create)
+        this.router.delete('/:id', Guard, this.remove)
+        this.router.put('/:id', Guard, this.update)
     }
 
     private getAll = async (req: Request, res: Response) => {
