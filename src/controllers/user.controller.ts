@@ -18,6 +18,7 @@ class UserController {
         this.router.get('/', this.getAll)
         this.router.get('/:id', this.getById)
         this.router.post('/', this.create)
+        this.router.delete('/:id', this.remove)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -43,6 +44,16 @@ class UserController {
         const createdEntity = await this.Service.create(validatedEntity)
 
         return res.status(201).json(createdEntity)
+    }
+
+    private remove = async (req: Request, res: Response) => {
+        const { id } = req.params
+
+        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
+
+        await this.Service.delete(validatedId)
+
+        return res.status(204).send()
     }
 }
 
