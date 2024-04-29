@@ -3,6 +3,7 @@ import { User, UserModel } from "../models/user.model";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
+import { Guard } from "../web/guard";
 
 
 class UserController {
@@ -15,11 +16,11 @@ class UserController {
     }
 
     private loadRoutes() {
-        this.router.get('/', this.getAll)
-        this.router.get('/:id', this.getById)
-        this.router.post('/', this.create)
-        this.router.delete('/:id', this.remove)
-        this.router.put('/:id', this.update)
+        this.router.get('/', this.getAll, Guard)
+        this.router.get('/:id', this.getById, Guard)
+        this.router.post('/', this.create, Guard)
+        this.router.delete('/:id', this.remove, Guard)
+        this.router.put('/:id', this.update, Guard)
     }
 
     private getAll = async (req: Request, res: Response) => {
