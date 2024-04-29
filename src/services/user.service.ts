@@ -48,7 +48,7 @@ class UserService {
     }
 
     async findById(id: number) {
-        return await searchEntity(this.userModel, { id }, false, true, 'User not found.')
+        return await searchEntity<User>(this.userModel, { id }, false, true, 'User not found.')
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
