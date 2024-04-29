@@ -1,6 +1,5 @@
 import { Entity, EntityModel } from '../src/models/entity.model';
 import { faker } from '@faker-js/faker'
-import jwt from 'jsonwebtoken'
 
 export const createEntity = async () => {
     const createdEntity = await EntityModel.create({
