@@ -46,7 +46,7 @@ test('should return 401 with different data types of token', async () => {
         await Guard(req4, res, next)
     } catch (error) {
         expect(error.status).toBe(401)
-        expect(error.message).toBe('Token invalid.')
+        expect(error.message).toBe('Token not provided.')
     }
 
     const req5 = mockedRequest(undefined)
@@ -64,7 +64,7 @@ test('should return 401 with different data types of token', async () => {
         await Guard(req6, res, next)
     } catch (error) {
         expect(error.status).toBe(401)
-        expect(error.message).toBe('Token invalid.')
+        expect(error.message).toBe('Token not provided.')
     }
 })
 
