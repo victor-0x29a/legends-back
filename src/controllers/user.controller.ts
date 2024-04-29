@@ -3,6 +3,7 @@ import { User, UserModel } from "../models/user.model";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createEntitySchema } from "../schemas/entity.schema";
+import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
 
 
 class UserController {
@@ -19,6 +20,7 @@ class UserController {
         this.router.get('/:id', this.getById)
         this.router.post('/', this.create)
         this.router.delete('/:id', this.remove)
+        this.router.put('/:id', this.update)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -39,7 +41,7 @@ class UserController {
     private create = async (req: Request, res: Response) => {
         const entity = req.body
 
-        const validatedEntity = await createEntitySchema.validate(entity) as Partial<User>
+        const validatedEntity = await createUserSchema.validate(entity)
 
         const createdEntity = await this.Service.create(validatedEntity)
 
@@ -52,6 +54,19 @@ class UserController {
         const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
 
         await this.Service.delete(validatedId)
+
+        return res.status(204).send()
+    }
+
+    private update = async (req: Request, res: Response) => {
+        const { id } = req.params
+        const entity = req.body
+
+        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
+
+        const validatedEntity = await updateUserSchema.validate(entity)
+
+        await this.Service.update(validatedId, validatedEntity)
 
         return res.status(204).send()
     }
