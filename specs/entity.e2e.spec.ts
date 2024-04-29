@@ -61,7 +61,7 @@ describe('POST /entity', () => {
            "sections": "markdown content",
            "type": "item"
         }
-        const response = await request(app)
+    const response = await request(app)
         .post('/entity')
         .send(entity)
 
