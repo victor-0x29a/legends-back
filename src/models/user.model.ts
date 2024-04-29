@@ -8,7 +8,7 @@ export type User = {
     password: string
 }
 
-export const UserModel = sequelize.define('entity', {
+export const UserModel = sequelize.define('user', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
