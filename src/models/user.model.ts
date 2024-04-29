@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../database/connection'
 
-export const UserModel = sequelize.define('entity', {
+export const UserModel = sequelize.define('user', {
     name: {
         type: DataTypes.STRING,
         defaultValue: 'Desconhecido',
