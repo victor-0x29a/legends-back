@@ -30,6 +30,14 @@ class UserService {
 
     async update(id: number, updateUserDto: UpdateUserDto) {
         await searchEntity(this.userModel, { id }, false, true, 'User not found.')
+
+        const isModifingPassword = updateUserDto.password !== undefined
+
+        if (isModifingPassword) {
+            const salts = await bcrypt.genSalt()
+            updateUserDto.password = await bcrypt.hash(updateUserDto.password, salts)
+        }
+
         return await this.userModel.update(updateUserDto, {
             where: { id },
             returning: false
