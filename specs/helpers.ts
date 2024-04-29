@@ -1,5 +1,6 @@
 import { Entity, EntityModel } from '../src/models/entity.model';
 import { faker } from '@faker-js/faker'
+import jwt from 'jsonwebtoken'
 
 export const createEntity = async () => {
     const createdEntity = await EntityModel.create({
@@ -18,3 +19,5 @@ export const createEntity = async () => {
     }) as unknown as Entity
     return createdEntity
 }
+
+export const generateToken = async () => await jwt.sign({ id: 1 }, 'secret', { expiresIn: '2min' })
