@@ -1,9 +1,10 @@
 import { Request, Response, Router } from "express";
-import { UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
 import { Guard } from "../web/guard";
+import { parseUser } from "../parsers/user.parser";
 
 
 class UserController {
@@ -24,8 +25,11 @@ class UserController {
     }
 
     private getAll = async (req: Request, res: Response) => {
-        const users = await this.Service.findAll()
-        return res.status(200).json(users)
+        const users = await this.Service.findAll() as unknown as User[]
+
+        const parsedUsers = users.map(parseUser)
+
+        return res.status(200).json(parsedUsers)
     }
 
     private getById = async (req: Request, res: Response) => {
@@ -35,7 +39,7 @@ class UserController {
 
         const entity = await this.Service.findById(validatedId)
 
-        return res.status(200).json(entity)
+        return res.status(200).json(parseUser(entity))
     }
 
     private create = async (req: Request, res: Response) => {
