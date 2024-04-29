@@ -172,3 +172,49 @@ describe('PUT /user/:id', () => {
         .expect(409)
     })
 })
+
+describe('POST /user/sign-in', () => {
+    test('should sign-in', async () => {
+        await request(app).post('/user').send({ username: 'foo-sigin', password: 'password' })
+        await request(app)
+        .post('/user/sign-in')
+        .send({
+            "username": "foo-sigin",
+            "password": "password"
+        })
+        .expect(200)
+    })
+    test('should return 401 with invalid credentials', async () => {
+        await request(app)
+        .post('/user/sign-in')
+        .send({
+            "username": "foo-sigin",
+            "password": "invalid"
+        })
+        .expect(401)
+    })
+    test('should return 400 with invalid body', async () => {
+        await request(app)
+        .post('/user/sign-in')
+        .send({})
+        .expect(400)
+    })
+    test('should return 400 with invalid username', async () => {
+        await request(app)
+        .post('/user/sign-in')
+        .send({
+            "username": {},
+            "password": "password"
+        })
+        .expect(400)
+    })
+    test('should return 400 with invalid password', async () => {
+        await request(app)
+        .post('/user/sign-in')
+        .send({
+            "username": "John Doe",
+            "password": {}
+        })
+        .expect(400)
+    })
+})
