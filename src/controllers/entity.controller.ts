@@ -88,7 +88,7 @@ class EntityController {
 
         await this.Service.create(validatedEntity)
 
-        return res.status(201).json({})
+        return res.status(201).json(entity)
     }
 }
 
