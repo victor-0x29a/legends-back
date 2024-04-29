@@ -11,6 +11,8 @@ let UserModel = {
 
 const service = new UserService(UserModel)
 
+const hash = '$2b$10$1Q6Zz1'
+
 
 describe('success', () => {
     describe('create', () => {
@@ -22,14 +24,19 @@ describe('success', () => {
                 password: 'test'
             }
 
+            const hashedUser = {
+                ...user,
+                password: hash
+            }
+
             // @ts-ignore
-            UserModel.create.mockResolvedValue(user)
+            UserModel.create.mockResolvedValue(hashedUser)
 
             // @ts-ignore
             UserModel.findOne.mockResolvedValue(null)
 
             const createdUser = await service.create(user)
-            expect(createdUser).toEqual(user)
+            expect(createdUser).toEqual(hashedUser)
         })
     })
     describe('findById', () => {
@@ -72,8 +79,7 @@ describe('success', () => {
             const user = {
                 id: 1,
                 name: 'test',
-                username: 'test',
-                password: 'test'
+                username: 'test'
             }
 
             // @ts-ignore
@@ -85,6 +91,31 @@ describe('success', () => {
             const updatedUser = await service.update(1, user)
 
             expect(updatedUser).toEqual([1])
+        })
+        it('should update a user with password', async () => {
+            const user = {
+                id: 1,
+                name: 'test',
+                username: 'test',
+                password: 'test'
+            }
+
+            const updatedUser = {
+                id: 1,
+                name: 'test',
+                username: 'test',
+                password: hash
+            }
+
+            // @ts-ignore
+            UserModel.update.mockResolvedValue([1])
+
+            // @ts-ignore
+            UserModel.findOne.mockResolvedValue(user)
+
+            const updatedUserWithPassword = await service.update(1, user)
+
+            expect(updatedUserWithPassword).toEqual([1])
         })
     })
     describe('delete', () => {
