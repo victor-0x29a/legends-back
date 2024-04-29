@@ -1,5 +1,6 @@
 import type { Model, ModelCtor } from "sequelize";
 import { UserService } from "./user.service";
+import * as bcrypt from 'bcrypt'
 
 let UserModel = {
     create: jest.fn(),
@@ -134,6 +135,28 @@ describe('success', () => {
             const deletedUser = await service.delete(1)
 
             expect(deletedUser).toBe(1)
+        })
+    })
+    describe('signIn', () => {
+        it('should sign in a user', async () => {
+            const passwordHashed = await bcrypt.hash('test', 10)
+
+            const user = {
+                id: 1,
+                name: 'test',
+                username: 'test',
+                password: passwordHashed
+            }
+
+            // @ts-ignore
+            UserModel.findOne.mockResolvedValue(user)
+
+            const token = await service.signIn({
+                username: 'test',
+                password: 'test'
+            })
+
+            expect(typeof token).toBe('string')
         })
     })
 })
