@@ -101,13 +101,6 @@ describe('success', () => {
                 password: 'test'
             }
 
-            const updatedUser = {
-                id: 1,
-                name: 'test',
-                username: 'test',
-                password: hash
-            }
-
             // @ts-ignore
             UserModel.update.mockResolvedValue([1])
 

@@ -1,4 +1,4 @@
-import { Entity, EntityModel } from "../models/entity.model";
+import { EntityModel } from "../models/entity.model";
 import { searchEntity } from "../utils/searchEntity";
 import { FindAllEntityDto } from "../dtos/find-all-entity.dto";
 import { UpdateEntityDto } from "../dtos/update-entity.dto";
