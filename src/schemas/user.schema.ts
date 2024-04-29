@@ -1,3 +1,4 @@
+import { PassThrough } from 'stream'
 import * as Yup from 'yup'
 
 const userSchema = {
@@ -16,7 +17,9 @@ const userSchema = {
 }
 
 export const createUserSchema = Yup.object().shape({
-    ...userSchema
+    username: userSchema.username,
+    password: userSchema.password,
+    name: userSchema.name.optional()
 })
 
 export const updateUserSchema = Yup.object().shape({
