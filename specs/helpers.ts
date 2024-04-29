@@ -19,5 +19,3 @@ export const createEntity = async () => {
     }) as unknown as Entity
     return createdEntity
 }
-
-export const generateToken = async () => await jwt.sign({ id: 1 }, 'secret', { expiresIn: '2min' })
