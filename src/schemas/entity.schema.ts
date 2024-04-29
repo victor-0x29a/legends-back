@@ -18,7 +18,7 @@ const entitySchema = {
         .typeError('Author must be a string.'),
     image: Yup.object()
         .test('is-image', 'Image must be a valid image.', (value) => {
-            if (value === null) return true
+            if (!value) return true
 
             const keys = Object.keys(value)
 
@@ -49,6 +49,7 @@ export const updateSchema = Yup.object().shape({
     sections: entitySchema.sections.optional(),
     type: entitySchema.type.optional(),
 }).test('fill-one-field', 'Fill one field to update.', (value) => {
+    if (!value) return false
     return Object.keys(value).length !== 0;
 })
 
