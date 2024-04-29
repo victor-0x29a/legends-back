@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { NextFunction } from "express"
 import { LegendHttpError } from './errors'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const HandlerException = (error: any, req, res, next: NextFunction) => {
     if (error instanceof Yup.ValidationError) {
         return res.status(400).json({ errorList: error.errors })
