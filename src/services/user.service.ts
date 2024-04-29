@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken'
 class UserService {
     constructor(private readonly userModel: typeof UserModel) {}
 
-    async signin(signInDto: SignInDto): Promise<string> {
+    async signIn(signInDto: SignInDto): Promise<string> {
         const user = await searchEntity<User>(this.userModel, { username: signInDto.username }, false, false)
 
         if (user === null) {
