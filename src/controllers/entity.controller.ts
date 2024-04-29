@@ -4,6 +4,7 @@ import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 import { Guard } from "../web/guard";
+import { isEnableLogging } from "../constants";
 
 
 class EntityController {
@@ -12,7 +13,9 @@ class EntityController {
 
     constructor() {
         this.loadRoutes()
-        console.log('EntityController loaded')
+        if (isEnableLogging) {
+            console.log('EntityController loaded')
+        }
     }
 
     private loadRoutes() {

@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../database/connection'
+import { isEnableLogging } from '../constants'
 
 export type Entity = {
     id: number
@@ -52,4 +53,4 @@ export const EntityModel = sequelize.define('entity', {
     }
 })
 
-EntityModel.sync({ force: true })
+EntityModel.sync({ force: true, logging: isEnableLogging })

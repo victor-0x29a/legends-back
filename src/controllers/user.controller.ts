@@ -5,6 +5,7 @@ import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
 import { Guard } from "../web/guard";
 import { parseUser } from "../parsers/user.parser";
+import { isEnableLogging } from "../constants";
 
 
 class UserController {
@@ -13,7 +14,9 @@ class UserController {
 
     constructor() {
         this.loadRoutes()
-        console.log('UserController loaded')
+        if (isEnableLogging) {
+            console.log('UserController loaded')
+        }
     }
 
     private loadRoutes() {
