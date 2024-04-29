@@ -183,6 +183,7 @@ describe('POST /user/sign-in', () => {
             "password": "password"
         })
         .expect(200)
+        .expect((response) => response.body.token.length > 0)
     })
     test('should return 401 with invalid credentials', async () => {
         await request(app)
