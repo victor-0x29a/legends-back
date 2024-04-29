@@ -51,3 +51,5 @@ export const EntityModel = sequelize.define('entity', {
         allowNull: false
     }
 })
+
+EntityModel.sync({ force: true })
