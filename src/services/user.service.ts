@@ -1,12 +1,35 @@
 import { CreateUserDto } from "../dtos/create-user.dto";
+import { SignInDto } from "../dtos/sign-in.dto";
 import { UpdateUserDto } from "../dtos/update-user.dto";
-import { UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 import { searchEntity } from "../utils/searchEntity";
 import * as bcrypt from 'bcrypt'
+import { LegendHttpError } from "../web/errors";
+import jwt from 'jsonwebtoken'
 
 
 class UserService {
     constructor(private readonly userModel: typeof UserModel) {}
+
+    async signin(signInDto: SignInDto): Promise<string> {
+        const user = await searchEntity<User>(this.userModel, { username: signInDto.username }, false, false)
+
+        if (user === null) {
+            throw new LegendHttpError(401, 'User or password invalid.')
+        }
+
+        const isPasswordMatch = await bcrypt.compare(signInDto.password, user.password)
+
+        if (!isPasswordMatch) {
+            throw new LegendHttpError(401, 'User or password invalid.')
+        }
+
+        const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            expiresIn: '20min'
+        })
+
+        return token
+    }
 
     async create(createUserDto: CreateUserDto) {
         await searchEntity(this.userModel, { username: createUserDto.username }, true, false, 'User already exists by username.')
