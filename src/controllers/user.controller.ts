@@ -1,7 +1,8 @@
 import { Request, Response, Router } from "express";
-import { UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
+import { createEntitySchema } from "../schemas/entity.schema";
 
 
 class UserController {
@@ -16,6 +17,7 @@ class UserController {
     private loadRoutes() {
         this.router.get('/', this.getAll)
         this.router.get('/:id', this.getById)
+        this.router.post('/', this.create)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -31,6 +33,16 @@ class UserController {
         const entity = await this.Service.findById(validatedId)
 
         return res.status(200).json(entity)
+    }
+
+    private create = async (req: Request, res: Response) => {
+        const entity = req.body
+
+        const validatedEntity = await createEntitySchema.validate(entity) as Partial<User>
+
+        const createdEntity = await this.Service.create(validatedEntity)
+
+        return res.status(201).json(createdEntity)
     }
 }
 
