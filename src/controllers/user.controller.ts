@@ -2,7 +2,6 @@ import { Request, Response, Router } from "express";
 import { User, UserModel } from "../models/user.model";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
-import { createEntitySchema } from "../schemas/entity.schema";
 import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
 
 
