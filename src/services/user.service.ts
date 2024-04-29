@@ -2,6 +2,7 @@ import { CreateUserDto } from "../dtos/create-user.dto";
 import { UpdateUserDto } from "../dtos/update-user.dto";
 import { UserModel } from "../models/user.model";
 import { searchEntity } from "../utils/searchEntity";
+import * as bcrypt from 'bcrypt'
 
 
 class UserService {
@@ -9,7 +10,12 @@ class UserService {
 
     async create(createUserDto: CreateUserDto) {
         await searchEntity(this.userModel, { username: createUserDto.username }, true, false, 'User already exists by username.')
-        return await this.userModel.create(createUserDto)
+        const salts = await bcrypt.genSalt()
+        const hashedPassword = await bcrypt.hash(createUserDto.password, salts)
+        return await this.userModel.create({
+            ...createUserDto,
+            password: hashedPassword
+        })
     }
 
     async findAll() {
