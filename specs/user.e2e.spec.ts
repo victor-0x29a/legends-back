@@ -135,3 +135,40 @@ describe('DELETE /user/:id', () => {
         .expect(404)
     })
 })
+
+describe('PUT /user/:id', () => {
+    test('should update', async () => {
+        const user = await createUser()
+        await request(app)
+        .put(`/user/${user.id}`)
+        .send({
+            "username": "John Doe 23"
+        })
+        .expect(204)
+
+        const updatedUser = await request(app).get(`/user/${user.id}`)
+
+        expect(updatedUser.body.username).toEqual('John Doe 23')
+    })
+    test('should return 400 with invalid id', async () => {
+        await request(app)
+        .put('/user/invalid')
+        .expect(400)
+    })
+    test('should return 404 with non existent id', async () => {
+        await request(app)
+        .put('/user/999999')
+        .expect(404)
+    })
+    test('should not update an user with an username that already exists', async () => {
+        const user = await createUser()
+        const user2 = await createUser()
+
+        await request(app)
+        .put(`/user/${user.id}`)
+        .send({
+            "username": user2.username
+        })
+        .expect(409)
+    })
+})
