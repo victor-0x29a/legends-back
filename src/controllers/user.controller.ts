@@ -2,9 +2,11 @@ import { Request, Response, Router } from "express";
 import { User, UserModel } from "../models/user.model";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
-import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
+import { createUserSchema, signInSchema, updateUserSchema } from "../schemas/user.schema";
 import { Guard } from "../web/guard";
 import { parseUser } from "../parsers/user.parser";
+import { isEnableLogging } from "../constants";
+import { SignInDto } from "../dtos/sign-in.dto";
 
 
 class UserController {
@@ -13,15 +15,26 @@ class UserController {
 
     constructor() {
         this.loadRoutes()
-        console.log('UserController loaded')
+        if (isEnableLogging) {
+            console.log('UserController loaded')
+        }
     }
 
     private loadRoutes() {
-        this.router.get('/', this.getAll, Guard)
-        this.router.get('/:id', this.getById, Guard)
-        this.router.post('/', this.create, Guard)
-        this.router.delete('/:id', this.remove, Guard)
-        this.router.put('/:id', this.update, Guard)
+        this.router.get('/', Guard, this.getAll)
+        this.router.get('/:id', Guard, this.getById)
+        this.router.post('/', Guard, this.create)
+        this.router.delete('/:id', Guard, this.remove)
+        this.router.put('/:id', Guard, this.update)
+        this.router.post('/sign-in', this.signIn)
+    }
+
+    private signIn = async (req: Request, res: Response) => {
+        const signInData = await signInSchema.validate(req.body || {}) as unknown as SignInDto
+
+        const token = await this.Service.signIn(signInData)
+
+        return res.status(200).json({ token })
     }
 
     private getAll = async (req: Request, res: Response) => {

@@ -1,8 +1,21 @@
 import { Sequelize } from "sequelize";
+import { isEnableLogging } from "../constants";
+
+const environment = process.env.NODE_ENV
+
+const storage = function () {
+    if (environment === 'test') {
+        return ':memory:'
+    }
+    return '../../infra/database.db'
+}()
 
 export const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: '../../infra/database.db'
+    storage: storage,
+    logging: isEnableLogging
 })
 
-export const SequelizeAuth = sequelize.authenticate()
+export const SequelizeAuth = sequelize.authenticate({
+    logging: isEnableLogging
+})

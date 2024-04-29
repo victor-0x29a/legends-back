@@ -4,6 +4,7 @@ import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 import { Guard } from "../web/guard";
+import { isEnableLogging } from "../constants";
 
 
 class EntityController {
@@ -12,15 +13,17 @@ class EntityController {
 
     constructor() {
         this.loadRoutes()
-        console.log('EntityController loaded')
+        if (isEnableLogging) {
+            console.log('EntityController loaded')
+        }
     }
 
     private loadRoutes() {
         this.router.get('/', this.getAll)
         this.router.get('/:id', this.getById)
-        this.router.delete('/:id', this.delete, Guard)
-        this.router.put('/:id', this.update, Guard)
-        this.router.post('/', this.create, Guard)
+        this.router.delete('/:id', Guard, this.delete)
+        this.router.put('/:id', Guard, this.update)
+        this.router.post('/', Guard, this.create)
     }
 
     private getAll = async (req: Request, res: Response) => {

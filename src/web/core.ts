@@ -7,12 +7,13 @@ import { HandlerException } from './handlerException'
 import { UserController } from '../controllers/user.controller';
 
 class WebCore {
-    constructor(private readonly port: number, private readonly app: Express) {}
-
-    public start(): void {
+    constructor(private readonly port: number, public readonly app: Express) {
         this.loadMiddlewares()
         this.loadRoutes()
         this.app.use(HandlerException);
+    }
+
+    public start(): void {
         this.app.listen(this.port, () => {
             console.log(`Server is running on port ${this.port}`)
         })

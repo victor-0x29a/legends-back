@@ -61,6 +61,12 @@ class UserService {
             updateUserDto.password = await bcrypt.hash(updateUserDto.password, salts)
         }
 
+        const isModifingUsername = updateUserDto.username !== undefined
+
+        if (isModifingUsername) {
+            await searchEntity(this.userModel, { username: updateUserDto.username }, true, false, 'User already exists by username.')
+        }
+
         return await this.userModel.update(updateUserDto, {
             where: { id },
             returning: false
