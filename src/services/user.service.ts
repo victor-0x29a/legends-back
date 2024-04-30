@@ -24,7 +24,7 @@ class UserService {
             throw new LegendHttpError(401, 'User or password invalid.')
         }
 
-        const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        const token = await jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
             expiresIn: '20min'
         })
 
