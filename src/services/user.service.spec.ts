@@ -1,6 +1,7 @@
 import type { Model, ModelCtor } from "sequelize";
 import { UserService } from "./user.service";
 import * as bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 let UserModel = {
     create: jest.fn(),
@@ -169,6 +170,14 @@ describe('success', () => {
             })
 
             expect(typeof token).toBe('string')
+
+            const decodedToken = jwt.decode(token) as {
+                id: number,
+                username: string
+            }
+
+            expect(decodedToken.username).toBeDefined()
+            expect(decodedToken.id).toBeDefined()
         })
     })
 })
