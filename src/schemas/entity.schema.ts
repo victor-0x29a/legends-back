@@ -13,10 +13,10 @@ const entitySchema = {
         .max(2800)
         .required()
         .typeError('Description must be a string.'),
-    author: Yup.string()
+    author: Yup.string().nullable()
         .max(30)
         .typeError('Author must be a string.'),
-    image: Yup.object()
+    image: Yup.object().nullable()
         .test('is-image', 'Image must be a valid image.', (value) => {
             if (value === null) return true
 
