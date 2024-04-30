@@ -79,8 +79,7 @@ describe('success', () => {
         it('should update a user', async () => {
             const user = {
                 id: 1,
-                name: 'test',
-                username: 'test'
+                name: 'test'
             }
 
             // @ts-ignore
@@ -97,7 +96,6 @@ describe('success', () => {
             const user = {
                 id: 1,
                 name: 'test',
-                username: 'test',
                 password: 'test'
             }
 
@@ -110,6 +108,27 @@ describe('success', () => {
             const updatedUserWithPassword = await service.update(1, user)
 
             expect(updatedUserWithPassword).toEqual([1])
+        })
+        it('should not update an user with an username that already exists', async () => {
+            const user = {
+                id: 1,
+                name: 'test',
+                username: 'test',
+                password: 'test'
+            }
+
+            // @ts-ignore
+            UserModel.update.mockResolvedValue([1])
+
+            // @ts-ignore
+            UserModel.findOne.mockResolvedValue(user)
+
+            await expect(service.update(1, {
+                id: 1,
+                name: 'test',
+                username: 'test1',
+                password: 'test'
+            })).rejects.toThrow('User already exists by username.')
         })
     })
     describe('delete', () => {
