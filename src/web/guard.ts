@@ -10,7 +10,7 @@ export const Guard = async (req: Request, res: Response, next: NextFunction) => 
         return next()
     }
 
-    const token = req.headers['Authorization'] as string
+    const token = req.headers['authorization'] as string
 
     if (!token) {
         throw new LegendHttpError(401, 'Token not provided.')
