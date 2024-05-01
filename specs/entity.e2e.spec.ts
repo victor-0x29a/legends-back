@@ -9,7 +9,28 @@ test('GET /entity', async () => {
     await request(app)
     .get('/entity?page=1&perPage=10')
     .expect(200)
-    .expect([])
+    .expect({
+        page: 1,
+        perPage: 10,
+        totalPages: 1,
+        entries: []
+    })
+})
+
+test('GET /entity with data', async () => {
+    await Promise.all(Array.from({ length: 20 }, createEntity))
+    const response = await request(app)
+    .get('/entity?page=1&perPage=10')
+    expect(response.status).toEqual(200)
+    expect(response.body.page).toEqual(1)
+    expect(response.body.perPage).toEqual(10)
+    expect(response.body.totalPages).toEqual(2)
+
+    const response2 = await request(app)
+    .get('/entity?page=1&perPage=20')
+    expect(response2.status).toEqual(200)
+    expect(response2.body.page).toEqual(1)
+    expect(response2.body.perPage).toEqual(20)
 })
 
 test('GET /entity without page and perPage', async () => {

@@ -5,6 +5,7 @@ import { EntityModel } from "../models/entity.model";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 import { Guard } from "../web/guard";
 import { isEnableLogging } from "../constants";
+import { buildPaginationResponse } from "../utils/buildPaginationResponse";
 
 
 class EntityController {
@@ -52,14 +53,9 @@ class EntityController {
             filters: hasFilters ? validatedFilters : undefined
         })
 
-        const totalPages = Math.ceil(count / pagination.perPage)
+        const response = buildPaginationResponse(count, pagination.perPage, pagination.page, rows)
 
-        return res.status(200).json({
-            page: pagination.page,
-            perPage: pagination.perPage,
-            totalPages,
-            entries: rows
-        })
+        return res.status(200).json(response)
     }
 
     private getById = async (req: Request, res: Response) => {
