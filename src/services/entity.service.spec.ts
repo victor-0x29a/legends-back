@@ -3,7 +3,7 @@ import { Model, ModelCtor } from 'sequelize'
 
 let mockedEntityModel = {
     create: jest.fn(),
-    findAll: jest.fn(),
+    findAndCountAll: jest.fn(),
     findByPk: jest.fn(),
     update: jest.fn(),
     destroy: jest.fn(),
@@ -39,13 +39,16 @@ describe('success', () => {
             }]
 
             // @ts-ignore
-            mockedEntityModel.findAll.mockResolvedValue(entities)
+            mockedEntityModel.findAndCountAll.mockResolvedValue({
+                rows: entities,
+                count: 1
+            })
 
             const foundEntities = await entityService.findAll({
                 page: 1,
                 perPage: 10
             })
-            expect(foundEntities).toEqual(entities)
+            expect(foundEntities.rows).toEqual(entities)
             expect(foundEntities.rows.length).toBe(1)
         })
         test('should return all entities with pagination and filters', async () => {
@@ -56,7 +59,10 @@ describe('success', () => {
             }]
 
             // @ts-ignore
-            mockedEntityModel.findAll.mockResolvedValue(entities)
+            mockedEntityModel.findAndCountAll.mockResolvedValue({
+                rows: entities,
+                count: 1
+            })
 
             const foundEntities = await entityService.findAll({
                 page: 1,
@@ -65,7 +71,7 @@ describe('success', () => {
                     title: 'test'
                 }
             })
-            expect(foundEntities).toEqual(entities)
+            expect(foundEntities.rows).toEqual(entities)
             expect(foundEntities.rows.length).toBe(1)
         })
     })
