@@ -14,7 +14,7 @@ class EntityService {
     }
 
     async findAll (findAllEntityDto: FindAllEntityDto) {
-        return await this.entityModel.findAll({
+        return await this.entityModel.findAndCountAll({
             limit: findAllEntityDto.perPage,
             offset: (findAllEntityDto.page - 1) * findAllEntityDto.perPage,
             attributes: ['id', 'title', 'image'],

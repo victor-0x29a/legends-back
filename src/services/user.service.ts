@@ -42,7 +42,7 @@ class UserService {
     }
 
     async findAll() {
-        return await this.userModel.findAll({
+        return await this.userModel.findAndCountAll({
             attributes: ['id', 'name', 'username']
         })
     }

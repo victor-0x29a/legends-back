@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 let UserModel = {
     create: jest.fn(),
-    findAll: jest.fn(),
+    findAndCountAll: jest.fn(),
     update: jest.fn(),
     destroy: jest.fn(),
     findOne: jest.fn()
@@ -67,13 +67,16 @@ describe('success', () => {
             }]
 
             // @ts-ignore
-            UserModel.findAll.mockResolvedValue(users)
+            UserModel.findAndCountAll.mockResolvedValue({
+                rows: users,
+                count: 1
+            })
 
             const foundUsers = await service.findAll()
 
-            expect(foundUsers).toEqual(users)
+            expect(foundUsers.rows.length).toBe(1)
+            expect(foundUsers.rows).toEqual(users)
             expect(typeof foundUsers).toBe('object')
-            expect(foundUsers.length).toBe(1)
         })
     })
     describe('update', () => {
