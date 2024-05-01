@@ -46,7 +46,7 @@ describe('success', () => {
                 perPage: 10
             })
             expect(foundEntities).toEqual(entities)
-            expect(foundEntities.length).toBe(1)
+            expect(foundEntities.rows.length).toBe(1)
         })
         test('should return all entities with pagination and filters', async () => {
             const entities = [{
@@ -66,7 +66,7 @@ describe('success', () => {
                 }
             })
             expect(foundEntities).toEqual(entities)
-            expect(foundEntities.length).toBe(1)
+            expect(foundEntities.rows.length).toBe(1)
         })
     })
     it('findById', async () => {

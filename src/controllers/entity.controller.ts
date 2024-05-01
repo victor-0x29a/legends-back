@@ -44,12 +44,22 @@ class EntityController {
 
         const pagination = await paginationSchema.validate({ page, perPage }) as unknown as parsedPaginationSchema
 
-        const entities = await this.Service.findAll({
+        const {
+            count,
+            rows
+        } = await this.Service.findAll({
             ...pagination,
             filters: hasFilters ? validatedFilters : undefined
         })
 
-        return res.status(200).json(entities)
+        const totalPages = Math.ceil(count / pagination.perPage)
+
+        return res.status(200).json({
+            page: pagination.page,
+            perPage: pagination.perPage,
+            totalPages,
+            entries: rows
+        })
     }
 
     private getById = async (req: Request, res: Response) => {
