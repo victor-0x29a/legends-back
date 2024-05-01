@@ -38,9 +38,14 @@ class UserController {
     }
 
     private getAll = async (req: Request, res: Response) => {
-        const users = await this.Service.findAll() as unknown as User[]
+        const {
+            rows
+        } = await this.Service.findAll() as unknown as {
+            count: number,
+            rows: User[]
+        }
 
-        const parsedUsers = users.map(parseUser)
+        const parsedUsers = rows.map(parseUser)
 
         return res.status(200).json(parsedUsers)
     }
