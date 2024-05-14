@@ -35,7 +35,8 @@ describe('success', () => {
             const entities = [{
                 id: 1,
                 title: 'test',
-                image: null
+                image: null,
+                type: 'item'
             }]
 
             // @ts-ignore
@@ -55,7 +56,8 @@ describe('success', () => {
             const entities = [{
                 id: 1,
                 title: 'test',
-                image: null
+                image: null,
+                type: 'item'
             }]
 
             // @ts-ignore
