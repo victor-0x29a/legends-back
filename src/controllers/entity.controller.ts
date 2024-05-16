@@ -1,12 +1,16 @@
 import { Router, Request, Response } from "express";
+import ApiCache from 'apicache'
 import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityService } from "../services/entity.service";
 import { EntityModel } from "../models/entity.model";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 import { Guard } from "../web/guard";
-import { isEnableLogging } from "../constants";
+import { isEnableLogging, isTestingEnvironment } from "../constants";
 import { buildPaginationResponse } from "../utils/buildPaginationResponse";
 
+ApiCache.options({
+    enabled: !isTestingEnvironment
+})
 
 class EntityController {
     private Service = new EntityService(EntityModel)
@@ -20,8 +24,8 @@ class EntityController {
     }
 
     private loadRoutes() {
-        this.router.get('/', this.getAll)
-        this.router.get('/:id', this.getById)
+        this.router.get('/', ApiCache.middleware('5 minutes'), this.getAll)
+        this.router.get('/:id', ApiCache.middleware('2 minutes'), this.getById)
         this.router.delete('/:id', Guard, this.delete)
         this.router.put('/:id', Guard, this.update)
         this.router.post('/', Guard, this.create)
