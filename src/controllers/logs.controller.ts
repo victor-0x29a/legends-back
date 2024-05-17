@@ -37,7 +37,7 @@ class LogController {
             rows
         } = await this.Service.find({
             pagination: pagination,
-            type: String(type) || null
+            type: (type ? String(type) : null)
         })
 
         const parsedRows = rows.map((logEntity: Model<Log, Log>) => ({
