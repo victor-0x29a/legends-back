@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize'
-import { sequelize } from '../database/connection'
+import { storageSequelize } from '../database/connection'
 import { isEnableLogging } from '../constants'
 
 export type Entity = {
@@ -13,7 +13,7 @@ export type Entity = {
     type: string
 }
 
-export const EntityModel = sequelize.define('entity', {
+export const EntityModel = storageSequelize.define('entity', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

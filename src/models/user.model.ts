@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize'
-import { sequelize } from '../database/connection'
+import { storageSequelize } from '../database/connection'
 import { isEnableLogging } from '../constants'
 
 export type User = {
@@ -9,7 +9,7 @@ export type User = {
     password: string
 }
 
-export const UserModel = sequelize.define('user', {
+export const UserModel = storageSequelize.define('user', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
