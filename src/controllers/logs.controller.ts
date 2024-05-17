@@ -24,7 +24,7 @@ class LogController {
     }
 
     private loadRoutes() {
-        this.router.get('/', Guard, this.getAll)
+        this.router.get('/', Guard, ApiCache.middleware(), this.getAll)
     }
 
     private getAll = async (req: Request, res: Response) => {
