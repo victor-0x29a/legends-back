@@ -7,6 +7,11 @@ export type Log = {
 }
 
 export const LogModel = storageLogsSequelize.define('log', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     type: {
         type: DataTypes.STRING,
         allowNull: false
