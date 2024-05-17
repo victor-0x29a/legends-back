@@ -1,15 +1,15 @@
-import { LogModel } from "../models/logs/log.model";
+import { Log, LogModel } from "../models/logs/log.model";
 import { parsedPaginationSchema } from "../schemas/global.schema";
 
 class LogService {
-    async register (type: string, content: string) {
+    async register (type: string, content: string): Promise<void> {
         try {
-            return await LogModel.create({ type, content })
+            await LogModel.create({ type, content })
         } catch (error) {
             console.error(error)
         }
     }
-    find (type: string | null = null, pagination: parsedPaginationSchema) {
+    find (type: string | null = null, pagination: parsedPaginationSchema): Promise<Log & { createdAt: string }> {
         return LogModel.findAndCountAll({
             limit: pagination.perPage,
             offset: (pagination.page - 1) * pagination.perPage,
@@ -18,7 +18,7 @@ class LogService {
             ...(type && { where: {
                 type
             } })
-        })
+        }) as unknown as Promise<Log & { createdAt: string }>
     }
 }
 
