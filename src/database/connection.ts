@@ -3,26 +3,21 @@ import { isEnableLogging } from "../constants";
 
 const environment = process.env.NODE_ENV
 
-const [storage, logsStorage] = function (): string[] {
-    if (environment === 'test') {
-        return [':memory:', ':memory:']
-    }
-    return ['../../infra/database.db', '../../infra/database-logs.db']
-}()
+const storage = (environment === 'test') ? ':memory:' : '../../infra/database.db'
 
-export const [storageSequelize, storageLogsSequelize] = function(): Sequelize[] {
-    const storageSequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: storage,
-        logging: isEnableLogging
-    })
-    const storageLogsSequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: logsStorage,
-        logging: isEnableLogging
-    })
-    return [storageSequelize, storageLogsSequelize]
-}()
+const logsStorage = (environment === 'test') ? ':memory:' : '../../infra/database-logs.db'
+
+
+export const storageSequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: storage,
+    logging: isEnableLogging
+})
+export const storageLogsSequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: logsStorage,
+    logging: isEnableLogging
+})
 
 export const SequelizeAuth = storageSequelize.authenticate({
     logging: isEnableLogging
