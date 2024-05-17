@@ -7,6 +7,7 @@ import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema }
 import { Guard } from "../web/guard";
 import { isEnableLogging, isTestingEnvironment } from "../constants";
 import { buildPaginationResponse } from "../utils/buildPaginationResponse";
+import { LogService } from "../services/log.service";
 
 ApiCache.options({
     enabled: !isTestingEnvironment
@@ -14,6 +15,7 @@ ApiCache.options({
 
 class EntityController {
     private Service = new EntityService(EntityModel)
+    private LogService = new LogService()
     public readonly router = Router()
 
     constructor() {
@@ -79,6 +81,10 @@ class EntityController {
 
         await this.Service.delete(validatedId)
 
+        const { Authorization } = req.headers
+
+        this.LogService.register('entity', `${Authorization} deleted the entity with id ${validatedId}`)
+
         return res.status(204).json({})
     }
 
@@ -92,6 +98,10 @@ class EntityController {
 
         await this.Service.update(validatedId, updateData)
 
+        const { Authorization } = req.headers
+
+        this.LogService.register('entity', `${Authorization} updated the entity with id ${validatedId}`)
+
         return res.status(204).json({})
     }
 
@@ -101,6 +111,10 @@ class EntityController {
         const validatedEntity = await createEntitySchema.validate(entity)
 
         await this.Service.create(validatedEntity)
+
+        const { Authorization } = req.headers
+
+        this.LogService.register('entity', `${Authorization} created an entity with title ${validatedEntity.title}`)
 
         return res.status(201).json(entity)
     }
