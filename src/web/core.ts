@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import EntityController from '../controllers/entity.controller'
 import { HandlerException } from './handlerException'
 import { UserController } from '../controllers/user.controller';
+import LogController from '../controllers/logs.controller';
 
 class WebCore {
     constructor(private readonly port: number, public readonly app: Express) {
@@ -28,6 +29,7 @@ class WebCore {
     private loadRoutes(): void {
         this.app.use('/entity', new EntityController().router)
         this.app.use('/user', new UserController().router)
+        this.app.use('/log', new LogController().router)
     }
 }
 

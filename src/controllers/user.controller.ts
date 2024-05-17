@@ -7,10 +7,12 @@ import { Guard } from "../web/guard";
 import { parseUser } from "../parsers/user.parser";
 import { isEnableLogging } from "../constants";
 import { SignInDto } from "../dtos/sign-in.dto";
+import { LogService } from "../services/log.service";
 
 
 class UserController {
     private Service = new UserService(UserModel)
+    private LogService = new LogService()
     public readonly router = Router()
 
     constructor() {
@@ -23,7 +25,7 @@ class UserController {
     private loadRoutes() {
         this.router.get('/', Guard, this.getAll)
         this.router.get('/:id', Guard, this.getById)
-        this.router.post('/', Guard, this.create)
+        this.router.post('/', this.create)
         this.router.delete('/:id', Guard, this.remove)
         this.router.put('/:id', Guard, this.update)
         this.router.post('/sign-in', this.signIn)
@@ -67,6 +69,10 @@ class UserController {
 
         const createdEntity = await this.Service.create(validatedEntity)
 
+        const { Authorization } = req.headers
+
+        this.LogService.register('user', `${Authorization} created an user`)
+
         return res.status(201).json(createdEntity)
     }
 
@@ -76,6 +82,10 @@ class UserController {
         const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
 
         await this.Service.delete(validatedId)
+
+        const { Authorization } = req.headers
+
+        this.LogService.register('user', `${Authorization} deleted an user with id ${validatedId}`)
 
         return res.status(204).send()
     }
@@ -89,6 +99,10 @@ class UserController {
         const validatedEntity = await updateUserSchema.validate(entity)
 
         await this.Service.update(validatedId, validatedEntity)
+
+        const { Authorization } = req.headers
+
+        this.LogService.register('user', `${Authorization} updated an user with id ${validatedId}`)
 
         return res.status(204).send()
     }
