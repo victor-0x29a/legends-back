@@ -1,3 +1,4 @@
+import { isEnableLogging } from "../constants";
 import { Log, LogModel } from "../models/logs/log.model";
 import { parsedPaginationSchema } from "../schemas/global.schema";
 
@@ -6,7 +7,9 @@ class LogService {
         try {
             await LogModel.create({ type, content })
         } catch (error) {
-            console.error(error)
+            if (isEnableLogging) {
+                console.error(error)
+            }
         }
     }
     find (type: string | null = null, pagination: parsedPaginationSchema): Promise<Log & { createdAt: string }> {
