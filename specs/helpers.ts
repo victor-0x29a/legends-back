@@ -34,7 +34,7 @@ export const createUser = async () => {
 export const createLog = async (customType = null) => {
     const createdLog = await LogModel.create({
         "type": customType || faker.string.uuid(),
-        "message": "test"
+        "content": "test"
     })
     return createdLog
 }
