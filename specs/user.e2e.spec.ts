@@ -1,7 +1,7 @@
 import request from 'supertest';
 import WebCore from '../src/web/core';
 import express from 'express';
-import { createUser } from './helpers';
+import { createUser, findUser } from './helpers';
 
 const app = new WebCore(3000, express()).app;
 
@@ -170,6 +170,16 @@ describe('PUT /user/:id', () => {
             "username": user2.username
         })
         .expect(409)
+    })
+    test('should not update the password.', async () => {
+        const user = await createUser()
+        await request(app).put(`/user/${user.id}`).send({
+            name: 'foo',
+            password: 'bar'
+        }).expect(204)
+        const foundUser = await findUser(user.id)
+        expect(foundUser.password).not.toEqual('bar')
+        expect(foundUser.name).toEqual('foo')
     })
 })
 

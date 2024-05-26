@@ -31,6 +31,15 @@ export const createUser = async () => {
     return createdUser as unknown as User
 }
 
+export const findUser = async (id: number) => {
+    const foundUser = await UserModel.findOne({
+        where: {
+            id
+        }
+    })
+    return foundUser as unknown as User | null
+}
+
 export const createLog = async (customType = null) => {
     const createdLog = await LogModel.create({
         "type": customType || faker.string.uuid(),
