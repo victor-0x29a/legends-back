@@ -23,8 +23,7 @@ export const createUserSchema = Yup.object().shape({
 
 export const updateUserSchema = Yup.object().shape({
     name: userSchema.name.optional(),
-    username: userSchema.username.optional(),
-    password: userSchema.password.optional()
+    username: userSchema.username.optional()
 }).test('fill-one-field', 'Fill one field to update.', (value) => {
     return Object.keys(value).length !== 0
 })
