@@ -25,7 +25,7 @@ class UserController {
     private loadRoutes() {
         this.router.get('/', Guard, this.getAll)
         this.router.get('/:id', Guard, this.getById)
-        this.router.post('/', this.create)
+        this.router.post('/', Guard, this.create)
         this.router.delete('/:id', Guard, this.remove)
         this.router.put('/:id', Guard, this.update)
         this.router.post('/sign-in', this.signIn)
