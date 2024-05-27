@@ -69,9 +69,9 @@ class UserController {
 
         const createdEntity = await this.Service.create(validatedEntity)
 
-        const { Authorization } = req.headers
+        const { authorization } = req.headers
 
-        this.LogService.register('user', `${Authorization} created an user`)
+        this.LogService.register('user', `${authorization} created an user`)
 
         return res.status(201).json(createdEntity)
     }
@@ -83,9 +83,9 @@ class UserController {
 
         await this.Service.delete(validatedId)
 
-        const { Authorization } = req.headers
+        const { authorization } = req.headers
 
-        this.LogService.register('user', `${Authorization} deleted an user with id ${validatedId}`)
+        this.LogService.register('user', `${authorization} deleted an user with id ${validatedId}`)
 
         return res.status(204).send()
     }
@@ -100,9 +100,9 @@ class UserController {
 
         await this.Service.update(validatedId, validatedEntity)
 
-        const { Authorization } = req.headers
+        const { authorization } = req.headers
 
-        this.LogService.register('user', `${Authorization} updated an user with id ${validatedId}`)
+        this.LogService.register('user', `${authorization} updated an user with id ${validatedId}`)
 
         return res.status(204).send()
     }
