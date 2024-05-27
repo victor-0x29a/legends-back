@@ -81,9 +81,9 @@ class EntityController {
 
         await this.Service.delete(validatedId)
 
-        const { Authorization } = req.headers
+        const { authorization } = req.headers
 
-        this.LogService.register('entity', `${Authorization} deleted the entity with id ${validatedId}`)
+        this.LogService.register('entity', `${authorization} deleted the entity with id ${validatedId}`)
 
         return res.status(204).json({})
     }
@@ -98,9 +98,9 @@ class EntityController {
 
         await this.Service.update(validatedId, updateData)
 
-        const { Authorization } = req.headers
+        const { authorization } = req.headers
 
-        this.LogService.register('entity', `${Authorization} updated the entity with id ${validatedId}`)
+        this.LogService.register('entity', `${authorization} updated the entity with id ${validatedId}`)
 
         return res.status(204).json({})
     }
@@ -112,9 +112,9 @@ class EntityController {
 
         await this.Service.create(validatedEntity)
 
-        const { Authorization } = req.headers
+        const { authorization } = req.headers
 
-        this.LogService.register('entity', `${Authorization} created an entity with title ${validatedEntity.title}`)
+        this.LogService.register('entity', `${authorization} created an entity with title ${validatedEntity.title}`)
 
         return res.status(201).json(entity)
     }
