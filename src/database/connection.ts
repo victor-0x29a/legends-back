@@ -1,11 +1,9 @@
 import { Sequelize } from "sequelize";
-import { isEnableLogging } from "../constants";
+import { isEnableLogging, isTestingEnvironment } from "../constants";
 
-const environment = process.env.NODE_ENV
+const storage = isTestingEnvironment ? ':memory:' : '../infra/database.db'
 
-const storage = (environment === 'test') ? ':memory:' : '../../infra/database.db'
-
-const logsStorage = (environment === 'test') ? ':memory:' : '../../infra/database-logs.db'
+const logsStorage = isTestingEnvironment ? ':memory:' : '../infra/database-logs.db'
 
 
 export const storageSequelize = new Sequelize({
