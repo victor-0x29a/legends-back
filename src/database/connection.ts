@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize";
 import { isEnableLogging, isTestingEnvironment } from "../constants";
 
-const storage = isTestingEnvironment ? ':memory:' : '../infra/database.db'
+const storage = isTestingEnvironment ? ':memory:' : './src/infra/database.db'
 
-const logsStorage = isTestingEnvironment ? ':memory:' : '../infra/database-logs.db'
+const logsStorage = isTestingEnvironment ? ':memory:' : './src/infra/database-logs.db'
 
 
 export const storageSequelize = new Sequelize({
