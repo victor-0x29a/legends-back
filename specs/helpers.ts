@@ -5,6 +5,7 @@ import { LogModel } from '../src/models/logs/log.model';
 import * as bcrypt from 'bcrypt'
 
 export const createEntity = async () => {
+    await EntityModel.sync({ force: true })
     const createdEntity = await EntityModel.create({
         "title": faker.string.uuid(),
         "properties": {
@@ -40,7 +41,7 @@ export const findUser = async (id: number) => {
     return foundUser as unknown as User | null
 }
 
-export const createLog = async (customType = null) => {
+export const createLog = async (customType: null | any = null) => {
     const createdLog = await LogModel.create({
         "type": customType || faker.string.uuid(),
         "content": "test"
