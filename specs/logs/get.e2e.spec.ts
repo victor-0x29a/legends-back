@@ -1,10 +1,6 @@
 import request from 'supertest'
-import express from 'express'
-import WebCore from "../src/web/core";
-import { createLog } from './helpers';
-
-
-const app = new WebCore(3000, express()).app
+import { app } from '../global'
+import { createLog } from '../helpers';
 
 
 test('GET /log', async () => {
