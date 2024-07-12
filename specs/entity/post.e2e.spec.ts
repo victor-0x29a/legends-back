@@ -1,8 +1,5 @@
 import request from 'supertest';
-import WebCore from '../../src/web/core';
-import express from 'express';
-
-const app = new WebCore(3000, express()).app;
+import { app } from '../global'
 
 describe('POST /entity', () => {
     test('should create', async () => {

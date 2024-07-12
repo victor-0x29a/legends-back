@@ -1,10 +1,6 @@
 import request from 'supertest';
-import WebCore from '../../src/web/core';
-import express from 'express';
+import { app } from '../global'
 import { createUser, findUser } from '../helpers';
-
-const app = new WebCore(3000, express()).app;
-
 describe('PUT /user/:id', () => {
     test('should update', async () => {
         const user = await createUser()
