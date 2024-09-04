@@ -1,4 +1,3 @@
-import express from 'express'
 import dotenv from "dotenv";
 import { SequelizeAuth, LogsSequelizeAuth } from "./database/connection"
 import WebCore from "./web/core";
