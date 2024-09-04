@@ -10,7 +10,7 @@ dotenv.config({
 LogsSequelizeAuth
 
 SequelizeAuth.then(() => {
-    new WebCore(Number(process!.env!.port!), express()).start()
+    new WebCore().start()
 }).catch(() => {
     throw new Error("Failed to connect to the database.")
 })

@@ -1,3 +1,4 @@
+import express from 'express'
 import type { Express } from 'express'
 require("express-async-errors");
 import cors from 'cors'
@@ -6,17 +7,26 @@ import EntityController from '../controllers/entity.controller'
 import { HandlerException } from './handlerException'
 import { UserController } from '../controllers/user.controller';
 import LogController from '../controllers/logs.controller';
+import { EnvironmentService } from '../services';
+import { EnvironmentVars } from '../interfaces';
 
-class WebCore {
-    constructor(private readonly port: number, public readonly app: Express) {
+class WebCore extends EnvironmentService {
+    public readonly app: Express = express()
+
+    constructor() {
+        const environmentInterface = process.env as unknown as EnvironmentVars
+        super(environmentInterface)
+
         this.loadMiddlewares()
         this.loadRoutes()
         this.app.use(HandlerException);
     }
 
     public start(): void {
-        this.app.listen(this.port, () => {
-            console.log(`Server is running on port ${this.port}`)
+        const httpPort = this.getPort()
+
+        this.app.listen(httpPort, () => {
+            console.log(`Server is running on port ${httpPort}`)
         })
     }
 
