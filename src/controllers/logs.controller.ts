@@ -1,26 +1,29 @@
 import { Router, Request, Response } from "express"
 import ApiCache from "apicache"
+import BaseController from "./base-controller"
 import { Guard } from "../web/guard"
 import { LogService } from "../services/log.service"
-import { isEnableLogging } from "../constants"
 import { paginationSchema, parsedPaginationSchema } from "../schemas/global.schema"
 import { buildPaginationResponse } from "../utils/buildPaginationResponse"
 import { Log } from "../models"
 import { Model } from "sequelize"
 
-ApiCache.options({
-    defaultDuration: '60 minutes'
-})
 
-class LogController {
+class LogController extends BaseController {
     private Service = new LogService()
     public readonly router = Router()
 
     constructor() {
+        super()
         this.loadRoutes()
-        if (isEnableLogging) {
+
+        if (this.getIsEnableLogging()) {
             console.log('LogController loaded')
         }
+
+        ApiCache.options({
+            enabled: !this.getIsTestingEnvironment()
+        })
     }
 
     private loadRoutes() {

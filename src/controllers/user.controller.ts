@@ -1,23 +1,25 @@
 import { Request, Response, Router } from "express";
+import BaseController from "./base-controller";
 import { User, UserModel } from "../models/";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, signInSchema, updateUserSchema } from "../schemas/user.schema";
 import { Guard } from "../web/guard";
 import { parseUser } from "../parsers/user.parser";
-import { isEnableLogging } from "../constants";
 import { SignInDto } from "../dtos/sign-in.dto";
 import { LogService } from "../services/log.service";
 
 
-class UserController {
+class UserController extends BaseController {
     private Service = new UserService(UserModel)
     private LogService = new LogService()
     public readonly router = Router()
 
     constructor() {
+        super()
         this.loadRoutes()
-        if (isEnableLogging) {
+
+        if (this.getIsEnableLogging()) {
             console.log('UserController loaded')
         }
     }
