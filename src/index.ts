@@ -24,12 +24,20 @@ function loadEntities (core: WebCore) {
     })
 }
 
-SequelizeAuth.then(() => {
+const authenticateOrm = (callback: () => void) => {
+    SequelizeAuth.then(() => {
+        callback()
+    }).catch(() => {
+        throw new Error("Failed to connect to the database.")
+    })
+}
+
+function startServer () {
     const Core = new WebCore()
 
     loadEntities(Core)
 
     Core.start()
-}).catch(() => {
-    throw new Error("Failed to connect to the database.")
-})
+}
+
+authenticateOrm(startServer)
