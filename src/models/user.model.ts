@@ -1,13 +1,6 @@
 import { DataTypes } from 'sequelize'
 import { storageSequelize } from '../database/connection'
 
-export type User = {
-    id: number
-    name: string
-    username: string
-    password: string
-}
-
 export const UserModel = storageSequelize.define('user', {
     id: {
         type: DataTypes.INTEGER,

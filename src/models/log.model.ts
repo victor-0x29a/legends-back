@@ -1,10 +1,5 @@
 import { DataTypes } from 'sequelize'
-import { storageLogsSequelize } from '../../database/connection'
-
-export type Log = {
-    type: string
-    content: string
-}
+import { storageLogsSequelize } from '../database/connection'
 
 export const LogModel = storageLogsSequelize.define('log', {
     id: {
@@ -21,5 +16,3 @@ export const LogModel = storageLogsSequelize.define('log', {
         allowNull: false
     }
 })
-
-LogModel.sync({ force: true })

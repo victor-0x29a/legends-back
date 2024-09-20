@@ -5,7 +5,7 @@ import { LogService } from "../services/log.service"
 import { isEnableLogging } from "../constants"
 import { paginationSchema, parsedPaginationSchema } from "../schemas/global.schema"
 import { buildPaginationResponse } from "../utils/buildPaginationResponse"
-import { Log } from "../models/logs/log.model"
+import { Log } from "../models"
 import { Model } from "sequelize"
 
 ApiCache.options({

@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import ApiCache from 'apicache'
 import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityService } from "../services/entity.service";
-import { EntityModel } from "../models/entity.model";
+import { EntityModel } from "../models";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
 import { Guard } from "../web/guard";
 import { isEnableLogging, isTestingEnvironment } from "../constants";

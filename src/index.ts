@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import { SequelizeAuth, LogsSequelizeAuth } from "./database/connection"
-import { EntityModel } from "./models/entity.model";
-import { UserModel } from "./models/user.model";
+import { UserModel, EntityModel, LogModel } from "./models";
 import WebCore from "./web/core";
 
 dotenv.config({
@@ -19,7 +18,10 @@ function loadEntities (core: WebCore) {
         force: core.getIsTestingEnvironment(),
         logging: core.getIsEnableLogging()
     })
-
+    LogModel.sync({
+        force: core.getIsTestingEnvironment(),
+        logging: core.getIsEnableLogging()
+    })
 }
 
 SequelizeAuth.then(() => {

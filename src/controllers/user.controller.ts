@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { User, UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, signInSchema, updateUserSchema } from "../schemas/user.schema";

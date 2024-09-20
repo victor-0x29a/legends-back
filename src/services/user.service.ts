@@ -1,7 +1,7 @@
 import { CreateUserDto } from "../dtos/create-user.dto";
 import { SignInDto } from "../dtos/sign-in.dto";
 import { UpdateUserDto } from "../dtos/update-user.dto";
-import { User, UserModel } from "../models/user.model";
+import { User, UserModel } from "../models";
 import { searchEntity } from "../utils/searchEntity";
 import * as bcrypt from 'bcrypt'
 import { LegendHttpError } from "../web/errors";
