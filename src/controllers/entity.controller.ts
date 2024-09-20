@@ -27,7 +27,7 @@ class EntityController {
 
     private loadRoutes() {
         this.router.get('/', ApiCache.middleware('5 minutes'), this.getAll)
-        this.router.get('/:id', ApiCache.middleware('2 minutes'), this.getById)
+        this.router.get('/:id', this.getById)
         this.router.delete('/:id', Guard, this.delete)
         this.router.put('/:id', Guard, this.update)
         this.router.post('/', Guard, this.create)
