@@ -1,7 +1,5 @@
-import { Entity, EntityModel } from '../src/models/entity.model';
 import { faker } from '@faker-js/faker'
-import { User, UserModel } from '../src/models/user.model';
-import { LogModel } from '../src/models/logs/log.model';
+import { LogModel, Entity, EntityModel, User, UserModel } from '../src/models';
 import * as bcrypt from 'bcrypt'
 
 export const createEntity = async () => {

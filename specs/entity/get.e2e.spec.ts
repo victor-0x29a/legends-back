@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../global'
+import { app } from '../e2e-config'
 import { createEntity } from '../helpers';
 
 test('GET /entity', async () => {

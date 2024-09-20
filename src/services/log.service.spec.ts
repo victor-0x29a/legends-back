@@ -1,4 +1,4 @@
-import { LogModel } from "../models/logs/log.model";
+import { LogModel } from "../models/";
 import { LogService } from "./log.service";
 
 afterEach(async () => {

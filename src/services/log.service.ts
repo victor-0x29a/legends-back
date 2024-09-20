@@ -1,6 +1,6 @@
 import { isEnableLogging } from "../constants";
 import { FindLogDto } from "../dtos/find-log-dto";
-import { LogModel } from "../models/logs/log.model";
+import { LogModel } from "../models/";
 
 class LogService {
     async register (type: string, content: string): Promise<void> {

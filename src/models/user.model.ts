@@ -1,13 +1,5 @@
 import { DataTypes } from 'sequelize'
 import { storageSequelize } from '../database/connection'
-import { isEnableLogging } from '../constants'
-
-export type User = {
-    id: number
-    name: string
-    username: string
-    password: string
-}
 
 export const UserModel = storageSequelize.define('user', {
     id: {
@@ -23,5 +15,3 @@ export const UserModel = storageSequelize.define('user', {
     username: DataTypes.STRING(20),
     password: DataTypes.STRING
 })
-
-UserModel.sync({ force: true, logging: isEnableLogging })
