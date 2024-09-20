@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 import { SequelizeAuth, LogsSequelizeAuth } from "./database/connection"
+import { EntityModel } from "./models/entity.model";
+import { UserModel } from "./models/user.model";
 import WebCore from "./web/core";
 
 dotenv.config({
@@ -8,8 +10,24 @@ dotenv.config({
 
 LogsSequelizeAuth
 
+function loadEntities (core: WebCore) {
+    EntityModel.sync({
+        force: core.getIsTestingEnvironment(),
+        logging: core.getIsEnableLogging()
+    })
+    UserModel.sync({
+        force: core.getIsTestingEnvironment(),
+        logging: core.getIsEnableLogging()
+    })
+
+}
+
 SequelizeAuth.then(() => {
-    new WebCore().start()
+    const Core = new WebCore()
+
+    loadEntities(Core)
+
+    Core.start()
 }).catch(() => {
     throw new Error("Failed to connect to the database.")
 })
