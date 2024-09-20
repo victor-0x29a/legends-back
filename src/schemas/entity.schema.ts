@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { Entity } from '../models/entity.model';
+import { Entity } from '../models';
 
 const entitySchema = {
     title: Yup.string()
