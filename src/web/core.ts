@@ -3,12 +3,10 @@ import type { Express } from 'express'
 require("express-async-errors");
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import EntityController from '../controllers/entity.controller'
 import { HandlerException } from './handlerException'
-import { UserController } from '../controllers/user.controller';
-import LogController from '../controllers/logs.controller';
 import { EnvironmentService } from '../services';
 import { EnvironmentVars } from '../interfaces';
+import { controllers } from '../controllers';
 
 class WebCore extends EnvironmentService {
     public readonly app: Express = express()
@@ -37,9 +35,9 @@ class WebCore extends EnvironmentService {
     }
 
     private loadRoutes(): void {
-        this.app.use('/entity', new EntityController().router)
-        this.app.use('/user', new UserController().router)
-        this.app.use('/log', new LogController().router)
+        controllers.forEach(
+            ([controller, path]) => this.app.use(path, controller)
+        )
     }
 }
 
