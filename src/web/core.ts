@@ -3,10 +3,10 @@ import type { Express } from 'express'
 require("express-async-errors");
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import { controllers } from '../controllers';
 import { HandlerException } from './handlerException'
 import { EnvironmentService } from '../services';
 import { EnvironmentVars } from '../interfaces';
-import { controllers } from '../controllers';
 
 class WebCore extends EnvironmentService {
     public readonly app: Express = express()
