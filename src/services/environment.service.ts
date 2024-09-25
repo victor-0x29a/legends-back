@@ -22,6 +22,10 @@ class Environment implements EnvironmentService {
     getPort(): number {
         return Number(this.environmentVars.PORT)
     }
+
+    getApplicationSecret(): string {
+        return String(this.environmentVars.JWT_SECRET)
+    }
 }
 
 export {
