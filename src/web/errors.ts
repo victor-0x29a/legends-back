@@ -4,4 +4,10 @@ class LegendHttpError extends Error {
   }
 }
 
-export { LegendHttpError }
+class InternalValidation extends Error {
+  constructor(public message: string) {
+    super(message)
+  }
+}
+
+export { LegendHttpError, InternalValidation }
