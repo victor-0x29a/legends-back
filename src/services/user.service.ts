@@ -5,28 +5,27 @@ import { User, UserModel } from "../models";
 import { searchEntity } from "../utils/searchEntity";
 import * as bcrypt from 'bcrypt'
 import { LegendHttpError } from "../web/errors";
-import jwt from 'jsonwebtoken'
+import { Auth as AuthService } from "./auth.service";
 
 
 class UserService {
-    constructor(private readonly userModel: typeof UserModel) {}
+    constructor(private readonly userModel: typeof UserModel, private readonly applicationSecret: string = '') {}
 
     async signIn(signInDto: SignInDto): Promise<string> {
         const user = await searchEntity<User>(this.userModel, { username: signInDto.username }, false, false)
 
-        if (user === null) {
+        const isPasswordMatch = await bcrypt.compare(
+            signInDto.password,
+            user?.password || ''
+        )
+
+        if ((user === null) || !isPasswordMatch) {
             throw new LegendHttpError(401, 'User or password invalid.')
         }
 
-        const isPasswordMatch = await bcrypt.compare(signInDto.password, user.password)
+        const auth = new AuthService(user, this.applicationSecret)
 
-        if (!isPasswordMatch) {
-            throw new LegendHttpError(401, 'User or password invalid.')
-        }
-
-        const token = await jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
-            expiresIn: '20min'
-        })
+        const token = auth.signToken()
 
         return token
     }

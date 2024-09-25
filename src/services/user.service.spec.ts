@@ -11,7 +11,7 @@ let UserModel = {
     findOne: jest.fn()
 } as unknown as ModelCtor<Model<any, any>>
 
-const service = new UserService(UserModel)
+const service = new UserService(UserModel, 'key')
 
 const hash = '$2b$10$1Q6Zz1'
 

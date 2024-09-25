@@ -11,8 +11,6 @@ import { LogService } from "../services/log.service";
 
 
 class UserController extends BaseController {
-    private Service = new UserService(UserModel)
-    private LogService = new LogService()
     public readonly router = Router()
 
     constructor() {
@@ -23,6 +21,9 @@ class UserController extends BaseController {
             console.log('UserController loaded')
         }
     }
+
+    private Service = new UserService(UserModel, this.getApplicationSecret())
+    private LogService = new LogService()
 
     private loadRoutes() {
         this.router.get('/', Guard, this.getAll)
