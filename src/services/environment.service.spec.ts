@@ -9,7 +9,7 @@ describe('test all service features', () => {
         const envVars = getEnvVar('NODE_ENV', 'dev')
         expect(getServiceInstance(envVars).getIsDevelopmentEnvironment()).toBe(true)
     })
-    test('should it returns aflse when is not dev environment', () => {
+    test('should it returns false when is not dev environment', () => {
         const envVars = getEnvVar('NODE_ENV', 'homolog')
         expect(getServiceInstance(envVars).getIsDevelopmentEnvironment()).toBe(false)
     })
@@ -29,7 +29,7 @@ describe('test all service features', () => {
         const envVars = getEnvVar('NODE_ENV', 'prod2')
         expect(getServiceInstance(envVars).getIsProductionEnvironment()).toBe(false)
     })
-    test('should is enabled loggin when is devlopment environment', () => {
+    test('should is enabled logging when is development environment', () => {
         const envVars = getEnvVar('NODE_ENV', 'dev')
         const service = getServiceInstance(envVars)
         expect(service.getIsDevelopmentEnvironment()).toBe(true)
