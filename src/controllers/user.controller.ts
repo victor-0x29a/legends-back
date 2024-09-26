@@ -32,10 +32,10 @@ class UserController extends BaseController {
     private loadRoutes() {
         this.router.get('/', Guard, this.getAll)
         this.router.get('/:id', Guard, this.getById)
-        this.router.post('/', ValidateSchema(createUserSchema), Guard, this.create)
+        this.router.post('/', Guard, ValidateSchema(createUserSchema), this.create)
         this.router.delete('/:id', Guard, this.remove)
-        this.router.put('/:id', ValidateSchema(updateUserSchema), Guard, this.update)
-        this.router.post('/sign-in', ValidateSchema(signInSchema), this.signIn)
+        this.router.put('/:id', Guard, ValidateSchema(updateUserSchema), this.update)
+        this.router.post('/sign-in', Guard, ValidateSchema(signInSchema), this.signIn)
     }
 
     private signIn = async (req: BaseRequest<SignInDto>, res: Response) => {
