@@ -3,7 +3,7 @@ import { SignInDto } from "../dtos/sign-in.dto";
 import { UpdateUserDto } from "../dtos/update-user.dto";
 import { User, UserModel } from "../models";
 import { searchEntity } from "../utils/searchEntity";
-import { LegendHttpError } from "../web/errors";
+import { LegendHttpError } from "../errors";
 import { Auth as AuthService } from "./auth.service";
 
 

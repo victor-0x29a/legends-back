@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import type { User } from '../models'
-import { InternalValidation } from '../web/errors'
+import { InternalValidation } from '../errors'
 
 class Auth {
     userData: User | null = null

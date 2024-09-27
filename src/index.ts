@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { SequelizeAuth, LogsSequelizeAuth } from "./database/connection"
 import { UserModel, EntityModel, LogModel } from "./models";
-import WebCore from "./web/core";
+import WebCore from "./core";
 
 dotenv.config({
     path: './.env'

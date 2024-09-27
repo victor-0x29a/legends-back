@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { LegendHttpError } from '../web/errors'
+import { LegendHttpError } from '../errors'
 import type { Response } from 'express'
 
 export const HandlerException = (

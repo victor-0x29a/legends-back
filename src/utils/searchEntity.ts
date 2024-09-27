@@ -1,5 +1,5 @@
 import type { Model, ModelCtor } from 'sequelize'
-import { LegendHttpError } from '../web/errors'
+import { LegendHttpError } from '../errors'
 
 export const searchEntity = async <T>(model: ModelCtor<Model>, by: any, throwIfExists: boolean, throwIfNotExists: boolean, customMessage = '') => {
     const entity = await model.findOne({ where: by }) as T
