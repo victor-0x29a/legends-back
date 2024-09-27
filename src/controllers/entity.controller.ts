@@ -1,13 +1,17 @@
 import { Router, Request, Response } from "express";
 import ApiCache from 'apicache'
 import BaseController from "./base-controller";
-import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
+import { ValidateSchema } from "./middlewares";
+import { Guard } from "../web/guard";
 import { EntityService } from "../services/entity.service";
+import { LogService } from "../services/log.service";
+import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityModel } from "../models";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
-import { Guard } from "../web/guard";
 import { buildPaginationResponse } from "../utils/buildPaginationResponse";
-import { LogService } from "../services/log.service";
+import { BaseRequest } from "./types";
+import { CreateEntityDto } from "../dtos/create-entity.dto";
+import { UpdateEntityDto } from "../dtos/update-entity.dto";
 
 
 class EntityController extends BaseController {
@@ -32,8 +36,8 @@ class EntityController extends BaseController {
         this.router.get('/', ApiCache.middleware('5 minutes'), this.getAll)
         this.router.get('/:id', this.getById)
         this.router.delete('/:id', Guard, this.delete)
-        this.router.put('/:id', Guard, this.update)
-        this.router.post('/', Guard, this.create)
+        this.router.put('/:id', Guard, ValidateSchema(updateSchema), this.update)
+        this.router.post('/', Guard, ValidateSchema(createEntitySchema), this.create)
     }
 
     private getAll = async (req: Request, res: Response) => {
@@ -91,15 +95,11 @@ class EntityController extends BaseController {
         return res.status(204).json({})
     }
 
-    private update = async (req: Request, res: Response) => {
+    private update = async (req: BaseRequest<UpdateEntityDto>, res: Response) => {
         const { id } = req.params
-        const entity = req.body
-
         const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
 
-        const updateData = await updateSchema.validate(entity)
-
-        await this.Service.update(validatedId, updateData)
+        await this.Service.update(validatedId, req.body)
 
         const { authorization } = req.headers
 
@@ -108,18 +108,16 @@ class EntityController extends BaseController {
         return res.status(204).json({})
     }
 
-    private create = async (req: Request, res: Response) => {
-        const entity = req.body
+    private create = async (req: BaseRequest<CreateEntityDto>, res: Response) => {
+        const entityData = req.body
 
-        const validatedEntity = await createEntitySchema.validate(entity)
-
-        await this.Service.create(validatedEntity)
+        await this.Service.create(entityData)
 
         const { authorization } = req.headers
 
-        this.LogService.register('entity', `${authorization} created an entity with title ${validatedEntity.title}`)
+        this.LogService.register('entity', `${authorization} created an entity with title ${entityData.title}`)
 
-        return res.status(201).json(entity)
+        return res.status(201).json(entityData)
     }
 }
 
