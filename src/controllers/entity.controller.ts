@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import ApiCache from 'apicache'
 import BaseController from "./base-controller";
-import { ValidateSchema } from "./middlewares";
+import { ValidateSchema } from "../middlewares";
 import { Guard } from "../middlewares";
 import { EntityService } from "../services/entity.service";
 import { LogService } from "../services/log.service";
