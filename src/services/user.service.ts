@@ -3,7 +3,6 @@ import { SignInDto } from "../dtos/sign-in.dto";
 import { UpdateUserDto } from "../dtos/update-user.dto";
 import { User, UserModel } from "../models";
 import { searchEntity } from "../utils/searchEntity";
-import * as bcrypt from 'bcrypt'
 import { LegendHttpError } from "../web/errors";
 import { Auth as AuthService } from "./auth.service";
 
@@ -12,9 +11,16 @@ class UserService {
     constructor(private readonly userModel: typeof UserModel, private readonly applicationSecret: string = '') {}
 
     async signIn(signInDto: SignInDto): Promise<string> {
-        const user = await searchEntity<User>(this.userModel, { username: signInDto.username }, false, false)
+        const user = await searchEntity<User>(
+            this.userModel,
+            { username: signInDto.username },
+            false,
+            false
+        )
 
-        const isPasswordMatch = await bcrypt.compare(
+        const authService = new AuthService(this.applicationSecret)
+
+        const isPasswordMatch = await authService.comparePlainTextWithHash(
             signInDto.password,
             user?.password || ''
         )
@@ -23,20 +29,29 @@ class UserService {
             throw new LegendHttpError(401, 'User or password invalid.')
         }
 
-        const auth = new AuthService(user, this.applicationSecret)
+        authService.user = user
 
-        const token = auth.signToken()
+        const token = authService.signToken()
 
         return token
     }
 
     async create(createUserDto: CreateUserDto) {
-        await searchEntity(this.userModel, { username: createUserDto.username }, true, false, 'User already exists by username.')
-        const salts = await bcrypt.genSalt()
-        const hashedPassword = await bcrypt.hash(createUserDto.password, salts)
+        await searchEntity(
+            this.userModel,
+            { username: createUserDto.username },
+            true,
+            false,
+            'User already exists by username.'
+        )
+
+        const authService = new AuthService()
+
+        const passwordHash = await authService.getPasswordHash(createUserDto.password)
+
         return await this.userModel.create({
             ...createUserDto,
-            password: hashedPassword
+            password: passwordHash
         })
     }
 
@@ -55,15 +70,23 @@ class UserService {
 
         const isModifingPassword = updateUserDto.password !== undefined
 
+        // TODO: create other route for change the password
         if (isModifingPassword) {
-            const salts = await bcrypt.genSalt()
-            updateUserDto.password = await bcrypt.hash(updateUserDto.password, salts)
+            const authService = new AuthService()
+
+            updateUserDto.password = await authService.getPasswordHash(updateUserDto.password)
         }
 
         const isModifingUsername = updateUserDto.username !== undefined
 
         if (isModifingUsername) {
-            await searchEntity(this.userModel, { username: updateUserDto.username }, true, false, 'User already exists by username.')
+            await searchEntity(
+                this.userModel,
+                { username: updateUserDto.username },
+                true,
+                false,
+                'User already exists by username.'
+            )
         }
 
         return await this.userModel.update(updateUserDto, {
@@ -73,7 +96,14 @@ class UserService {
     }
 
     async delete(id: number) {
-        await searchEntity(this.userModel, { id }, false, true, 'User not found.')
+        await searchEntity(
+            this.userModel,
+            { id },
+            false,
+            true,
+            'User not found.'
+        )
+
         return await this.userModel.destroy({
             where: { id }
         })
