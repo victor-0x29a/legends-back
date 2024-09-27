@@ -8,7 +8,6 @@ import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, signInSchema, updateUserSchema } from "../schemas/user.schema";
 import { parseUser } from "../parsers/user.parser";
 import { SignInDto } from "../dtos/sign-in.dto";
-import { LogService } from "../services/log.service";
 import { BaseRequest } from "./types";
 import { CreateUserDto } from "../dtos/create-user.dto";
 import { UpdateUserDto } from "../dtos/update-user.dto";
@@ -27,7 +26,6 @@ class UserController extends BaseController {
     }
 
     private Service = new UserService(UserModel, this.getApplicationSecret())
-    private LogService = new LogService()
 
     private loadRoutes() {
         this.router.get('/', Guard, this.getAll)
@@ -68,10 +66,6 @@ class UserController extends BaseController {
     private create = async (req: BaseRequest<CreateUserDto>, res: Response) => {
         const createdEntity = await this.Service.create(req.body)
 
-        const { authorization } = req.headers
-
-        this.LogService.register('user', `${authorization} created an user`)
-
         return res.status(201).json(createdEntity)
     }
 
@@ -80,10 +74,6 @@ class UserController extends BaseController {
 
         await this.Service.delete(id)
 
-        const { authorization } = req.headers
-
-        this.LogService.register('user', `${authorization} deleted an user with id ${req.params.id}`)
-
         return res.status(204).send()
     }
 
@@ -91,10 +81,6 @@ class UserController extends BaseController {
         const id = await validateSchema<string, parsedIdSchema>(idSchema, req.params.id)
 
         await this.Service.update(id, req.body)
-
-        const { authorization } = req.headers
-
-        this.LogService.register('user', `${authorization} updated an user with id ${id}`)
 
         return res.status(204).send()
     }

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { LogModel, Entity, EntityModel, User, UserModel } from '../src/models';
+import { Entity, EntityModel, User, UserModel } from '../src/models';
 import * as bcrypt from 'bcrypt'
 
 export const createEntity = async () => {
@@ -37,12 +37,4 @@ export const findUser = async (id: number) => {
         }
     })
     return foundUser as unknown as User | null
-}
-
-export const createLog = async (customType: null | any = null) => {
-    const createdLog = await LogModel.create({
-        "type": customType || faker.string.uuid(),
-        "content": "test"
-    })
-    return createdLog
 }

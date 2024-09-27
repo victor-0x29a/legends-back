@@ -1,26 +1,25 @@
 import { Sequelize } from "sequelize";
 import { isEnableLogging, isTestingEnvironment } from "../constants";
 
-const storage = isTestingEnvironment ? ':memory:' : './src/infra/database.db'
+const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT } = process.env
 
-const logsStorage = isTestingEnvironment ? ':memory:' : './src/infra/database-logs.db'
-
+const storage = isTestingEnvironment ? ':memory:' : undefined
+const options = isTestingEnvironment ? {} : {
+    host: POSTGRES_HOST,
+    port: Number(POSTGRES_PORT),
+    username: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+    database: POSTGRES_DB
+}
+const dialect = isTestingEnvironment ? 'sqlite' : 'postgres'
 
 export const storageSequelize = new Sequelize({
-    dialect: 'sqlite',
+    dialect,
     storage: storage,
-    logging: isEnableLogging
-})
-export const storageLogsSequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: logsStorage,
-    logging: isEnableLogging
+    logging: isEnableLogging,
+    ...options
 })
 
 export const SequelizeAuth = storageSequelize.authenticate({
-    logging: isEnableLogging
-})
-
-export const LogsSequelizeAuth = storageLogsSequelize.authenticate({
     logging: isEnableLogging
 })

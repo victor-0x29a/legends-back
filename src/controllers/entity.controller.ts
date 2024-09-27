@@ -4,7 +4,6 @@ import BaseController from "./base-controller";
 import { ValidateSchema } from "../middlewares";
 import { Guard } from "../middlewares";
 import { EntityService } from "../services/entity.service";
-import { LogService } from "../services/log.service";
 import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";
 import { EntityModel } from "../models";
 import { createEntitySchema, findAllFilters, parsedFiltersSchema, updateSchema } from "../schemas/entity.schema";
@@ -16,7 +15,6 @@ import { UpdateEntityDto } from "../dtos/update-entity.dto";
 
 class EntityController extends BaseController {
     private Service = new EntityService(EntityModel)
-    private LogService = new LogService()
     public readonly router = Router()
 
     constructor() {
@@ -88,10 +86,6 @@ class EntityController extends BaseController {
 
         await this.Service.delete(validatedId)
 
-        const { authorization } = req.headers
-
-        this.LogService.register('entity', `${authorization} deleted the entity with id ${validatedId}`)
-
         return res.status(204).json({})
     }
 
@@ -101,10 +95,6 @@ class EntityController extends BaseController {
 
         await this.Service.update(validatedId, req.body)
 
-        const { authorization } = req.headers
-
-        this.LogService.register('entity', `${authorization} updated the entity with id ${validatedId}`)
-
         return res.status(204).json({})
     }
 
@@ -112,10 +102,6 @@ class EntityController extends BaseController {
         const entityData = req.body
 
         await this.Service.create(entityData)
-
-        const { authorization } = req.headers
-
-        this.LogService.register('entity', `${authorization} created an entity with title ${entityData.title}`)
 
         return res.status(201).json(entityData)
     }
