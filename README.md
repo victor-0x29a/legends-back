@@ -10,6 +10,7 @@ For Linux/Windows/Mac:
 
 - Install the latest version from [Node.Js](https://nodejs.org/en)
 - Install the latest version from [NPM](https://www.npmjs.com/)
+- Install the latest version from [DOCKER](https://www.docker.com/) and [DOCKER-COMPOSE](https://docs.docker.com/compose/)
 
 And now, after install the npm, let's install the [yarn](https://yarnpkg.com/) (Other package manager) running the command:
 
@@ -21,7 +22,9 @@ When the [yarn](https://yarnpkg.com/) is installed, let's go install all the dep
 
 # How to run the project?
 
-Run: `yarn dev`
+Run:
+    - `docker-compose up -d`
+    - `yarn dev`
 
 # Conventional commits for this project
 
