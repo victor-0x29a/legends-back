@@ -13,14 +13,12 @@ const options = isTestingEnvironment ? {} : {
 }
 const dialect = isTestingEnvironment ? 'sqlite' : 'postgres'
 
-export const storageSequelize = (function () {
-    return new Sequelize({
-        dialect,
-        storage: storage,
-        logging: isEnableLogging,
-        ...options
-    })
-}())
+export const storageSequelize = new Sequelize({
+    dialect,
+    storage: storage,
+    logging: isEnableLogging,
+    ...options
+})
 
 export const SequelizeAuth = storageSequelize.authenticate({
     logging: isEnableLogging
