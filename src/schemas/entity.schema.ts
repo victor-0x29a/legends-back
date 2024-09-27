@@ -5,7 +5,7 @@ const entitySchema = {
     title: Yup.string()
         .required()
         .typeError('Title must be a string.'),
-    properties: Yup.object()
+    properties: Yup.mixed()
         .required()
         .default({})
         .typeError('Properties must be an object.'),
@@ -16,7 +16,10 @@ const entitySchema = {
     author: Yup.string().nullable()
         .max(30)
         .typeError('Author must be a string.'),
-    image: Yup.object().nullable()
+    image: Yup.object().default(null).shape({
+        src: Yup.string(),
+        alt: Yup.string()
+    }).nullable()
         .test('is-image', 'Image must be a valid image.', (value) => {
             if (!value) return true
 
@@ -24,7 +27,9 @@ const entitySchema = {
 
             if (keys.length !== 2) return false
 
-            if (!keys.includes('src') || !keys.includes('alt')) return false
+            if (!keys.includes('src') || !keys.includes('alt')) {
+                return false
+            }
 
             return true
         })

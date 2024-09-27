@@ -1,14 +1,18 @@
 import { Request, Response, Router } from "express";
 import BaseController from "./base-controller";
+import { Guard } from "../middlewares";
+import { ValidateSchema } from "../middlewares";
 import { User, UserModel } from "../models/";
 import { UserService } from "../services/user.service";
 import { idSchema, parsedIdSchema } from "../schemas/global.schema";
 import { createUserSchema, signInSchema, updateUserSchema } from "../schemas/user.schema";
-import { Guard } from "../web/guard";
 import { parseUser } from "../parsers/user.parser";
 import { SignInDto } from "../dtos/sign-in.dto";
 import { LogService } from "../services/log.service";
-
+import { BaseRequest } from "./types";
+import { CreateUserDto } from "../dtos/create-user.dto";
+import { UpdateUserDto } from "../dtos/update-user.dto";
+import { validateSchema } from "../utils/validateSchema";
 
 class UserController extends BaseController {
     public readonly router = Router()
@@ -28,16 +32,14 @@ class UserController extends BaseController {
     private loadRoutes() {
         this.router.get('/', Guard, this.getAll)
         this.router.get('/:id', Guard, this.getById)
-        this.router.post('/', Guard, this.create)
+        this.router.post('/', Guard, ValidateSchema(createUserSchema), this.create)
         this.router.delete('/:id', Guard, this.remove)
-        this.router.put('/:id', Guard, this.update)
-        this.router.post('/sign-in', this.signIn)
+        this.router.put('/:id', Guard, ValidateSchema(updateUserSchema), this.update)
+        this.router.post('/sign-in', Guard, ValidateSchema(signInSchema), this.signIn)
     }
 
-    private signIn = async (req: Request, res: Response) => {
-        const signInData = await signInSchema.validate(req.body || {}) as unknown as SignInDto
-
-        const token = await this.Service.signIn(signInData)
+    private signIn = async (req: BaseRequest<SignInDto>, res: Response) => {
+        const token = await this.Service.signIn(req.body)
 
         return res.status(200).json({ token })
     }
@@ -56,21 +58,15 @@ class UserController extends BaseController {
     }
 
     private getById = async (req: Request, res: Response) => {
-        const { id } = req.params
+        const id = await validateSchema<string, number>(idSchema, req.params?.id)
 
-        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
-
-        const entity = await this.Service.findById(validatedId)
+        const entity = await this.Service.findById(id)
 
         return res.status(200).json(parseUser(entity))
     }
 
-    private create = async (req: Request, res: Response) => {
-        const entity = req.body
-
-        const validatedEntity = await createUserSchema.validate(entity)
-
-        const createdEntity = await this.Service.create(validatedEntity)
+    private create = async (req: BaseRequest<CreateUserDto>, res: Response) => {
+        const createdEntity = await this.Service.create(req.body)
 
         const { authorization } = req.headers
 
@@ -80,32 +76,25 @@ class UserController extends BaseController {
     }
 
     private remove = async (req: Request, res: Response) => {
-        const { id } = req.params
+        const id = await validateSchema<string, number>(idSchema, req.params?.id)
 
-        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
-
-        await this.Service.delete(validatedId)
+        await this.Service.delete(id)
 
         const { authorization } = req.headers
 
-        this.LogService.register('user', `${authorization} deleted an user with id ${validatedId}`)
+        this.LogService.register('user', `${authorization} deleted an user with id ${req.params.id}`)
 
         return res.status(204).send()
     }
 
-    private update = async (req: Request, res: Response) => {
-        const { id } = req.params
-        const entity = req.body
+    private update = async (req: BaseRequest<UpdateUserDto, any, any>, res: Response) => {
+        const id = await validateSchema<string, parsedIdSchema>(idSchema, req.params.id)
 
-        const validatedId = await idSchema.validate(id) as unknown as parsedIdSchema
-
-        const validatedEntity = await updateUserSchema.validate(entity)
-
-        await this.Service.update(validatedId, validatedEntity)
+        await this.Service.update(id, req.body)
 
         const { authorization } = req.headers
 
-        this.LogService.register('user', `${authorization} updated an user with id ${validatedId}`)
+        this.LogService.register('user', `${authorization} updated an user with id ${id}`)
 
         return res.status(204).send()
     }

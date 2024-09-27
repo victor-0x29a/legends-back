@@ -11,7 +11,11 @@ const userData = {
 describe('should success in all flow methods', () => {
     const appSecret = '--key--'
 
-    const service = new Auth(userData, appSecret)
+    const service = (function () {
+        const authService = new Auth(appSecret)
+        authService.user = userData
+        return authService
+    }())
 
     test('should get the sign payload', () => {
         const payloadExpected = {
@@ -38,10 +42,38 @@ describe('should success in all flow methods', () => {
         expect(typeof tokenSigned).toEqual('string')
         expect(tokenParts).toBe(3)
     })
+
+    test('should gen a password hash', async () => {
+        const plainText = '--password--'
+
+        const hash = await service.getPasswordHash(plainText)
+
+        expect(hash).not.toEqual(plainText)
+    })
+
+    test('should compare a plain text with a generated hash', async () => {
+        const plainText = '--password--'
+
+        const hash = await service.getPasswordHash(plainText)
+
+        const result = await service.comparePlainTextWithHash(plainText, hash)
+
+        expect(result).toBe(true)
+
+        const wrongResult = await service.comparePlainTextWithHash('--key--', hash)
+
+        expect(wrongResult).toBe(false)
+    })
 })
 
 describe('should test all validation methods', () => {
-    const generateService = (appSecret: undefined | number | object | null | string) => new Auth(userData, appSecret as unknown as string)
+    const generateService = (appSecret: undefined | number | object | null | string) => {
+        const authService = new Auth(appSecret as unknown as string)
+
+        authService.user = userData
+
+        return authService
+    }
 
     const validationErrorMessage = 'The application secret must be provided.'
 
