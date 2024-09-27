@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { NextFunction, Request, Response } from "express"
-import { LegendHttpError } from "./errors"
+import { LegendHttpError } from "../web/errors"
 
 export const Guard = async (req: Request, res: Response, next: NextFunction) => {
 

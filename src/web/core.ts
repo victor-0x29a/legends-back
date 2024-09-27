@@ -4,7 +4,7 @@ require("express-async-errors");
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { controllers } from '../controllers';
-import { HandlerException } from './handlerException'
+import { HandlerException } from '../middlewares'
 import { EnvironmentService } from '../services';
 import { EnvironmentVars } from '../interfaces';
 

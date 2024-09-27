@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import ApiCache from 'apicache'
 import BaseController from "./base-controller";
 import { ValidateSchema } from "./middlewares";
-import { Guard } from "../web/guard";
+import { Guard } from "../middlewares";
 import { EntityService } from "../services/entity.service";
 import { LogService } from "../services/log.service";
 import { idSchema, paginationSchema, parsedIdSchema, parsedPaginationSchema } from "../schemas/global.schema";

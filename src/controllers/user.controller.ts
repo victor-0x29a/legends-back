@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import BaseController from "./base-controller";
-import { Guard } from "../web/guard";
+import { Guard } from "../middlewares";
 import { ValidateSchema } from "./middlewares";
 import { User, UserModel } from "../models/";
 import { UserService } from "../services/user.service";
