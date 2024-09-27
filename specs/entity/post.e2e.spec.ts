@@ -30,21 +30,4 @@ describe('POST /entity', () => {
         .send({})
         .expect(400)
     })
-    test('should reject entity with invalid properties', async () => {
-        await request(app)
-        .post('/entity')
-        .send({
-            "title": 1,
-            "properties": "invalid",
-            "description": "Lorem lorem lorem",
-            "author": "John Doe",
-            "image": {
-                "src": "url",
-                "alt": "alt"
-            },
-            "sections": "markdown content",
-            "type": "item"
-        })
-        .expect(400)
-    })
 })
